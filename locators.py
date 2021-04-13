@@ -12,7 +12,7 @@ class MainActivityLocators():
     BDALEJ = (By.ID, 'autyzmsoft.pl.profmarcin:id/bDalej')
 
 
-class SettingsLocators():
+class SettingsAcctivityLocators():
 
     BMINUS = (By.ID, 'autyzmsoft.pl.profmarcin:id/btn_Minus')
     BPLUS = (By.ID, 'autyzmsoft.pl.profmarcin:id/btn_Plus')

@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.wait import WebDriverWait
 
-from locators import MainActivityLocators, SettingsLocators
+from locators import MainActivityLocators, SettingsAcctivityLocators
 from tests.base_test import BaseTest
 from tests.helpers.screens import screen_shot
 
@@ -74,7 +74,7 @@ class MainActivityTest(BaseTest):
         """
         WebDriverWait(self.driver, 5).until(EC.presence_of_element_located(MainActivityLocators.IMAGE_AREA))
         self.ma.long_touch_on_image()
-        WebDriverWait(self.driver, 5).until(EC.presence_of_element_located(SettingsLocators.POZIOM))
+        WebDriverWait(self.driver, 5).until(EC.presence_of_element_located(SettingsAcctivityLocators.POZIOM))
         list_not_empty = self.sa.settings_elements_present()
         self.assertTrue(list_not_empty, "Settings did not appear!")
 
@@ -134,10 +134,10 @@ class MainActivityTest(BaseTest):
         """
         What happens after we click on the button with green arrow.
         Passed if:
-        - new word buttons appear AND
-        - buttons under the picture disappeared AND
-        - the number of the new word buttons equals the number of the old ones.
-        Note: picture may not be present, it is correct, do not test this.
+        1.new word buttons appear AND
+        2.buttons under the picture disappeared AND
+        3.the number of the new word buttons equals the number of the old ones.
+        Note: picture may not be present; it is correct, do not test this.
         """
         # Waiting for the buttons with words to appear
         WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
@@ -152,13 +152,13 @@ class MainActivityTest(BaseTest):
         # Waiting for the new word buttons to appear:
         sleep(2)
 
-        # Checking the test conditions, one by one:
+        # Checking the test conditions 1,2,3,4, one by one:
 
-        # Did new buttons appear?
+        # 1.Did new buttons appear?
         new_number = len(self.ma.get_word_buttons_list())
         test_fail_1 = not (new_number > 0)
 
-        # Checking whether the buttons under the picture disappeared:
+        # 2.Checking whether the buttons under the picture disappeared:
         try:
             self.ma.get_bdalej_button()
             test_fail_2 = True
@@ -171,7 +171,7 @@ class MainActivityTest(BaseTest):
         except NoSuchElementException:
             test_fail_3 = False
 
-        # Are the numbers of new and old buttons the same?
+        # 3.Are the numbers of new and old buttons the same?
         test_fail_4 = not (old_number == new_number)
 
         test_fail = test_fail_1 or test_fail_2 or test_fail_3 or test_fail_4
@@ -179,7 +179,7 @@ class MainActivityTest(BaseTest):
         if test_fail:
             screen_shot(self, "Error while moving to the next exercise")
 
-        # Determining the reason(s) of negative test:
+        # 4.Determining the reason(s) of negative test:
         reason = []
         if test_fail_1: reason.append("new word buttons did not appear")
         if test_fail_2: reason.append("green arrow button still present")

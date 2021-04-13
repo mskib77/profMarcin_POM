@@ -10,6 +10,7 @@ PATH = lambda p: os.path.abspath(
     os.path.join(os.path.dirname(__file__), p)
 )
 
+
 class BaseTest(unittest.TestCase):
     """
     Klasa bazowa każdego testu
@@ -37,6 +38,3 @@ class BaseTest(unittest.TestCase):
     def tearDown(self):
         print("tearDown z BaseTest")
         self.driver.quit()
-
-
-
