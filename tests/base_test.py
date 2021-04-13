@@ -29,7 +29,7 @@ class BaseTest(unittest.TestCase):
         self.driver.implicitly_wait(10)
         self.driver.find_element(By.ID, "autyzmsoft.pl.profmarcin:id/btn_OK").click()
         '''
-        SUT objects (activities) creation:
+        SUT objects (=activities) creation:
         '''
         self.ma = MainActivity(self.driver)
         self.sa = SettingsActivity(self.driver)
