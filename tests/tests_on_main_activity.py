@@ -135,11 +135,14 @@ class MainActivityTest(BaseTest):
         What happens after we click on the button with green arrow.
         Passed if:
         - new word buttons appear AND
-        - buttons under the picture disappear.
-        Note: picture may not be present, it is correct.
+        - buttons under the picture disappeared AND
+        - the number of the new word buttons equals the number of the old ones.
+        Note: picture may not be present, it is correct, do not test this.
         """
         # Waiting for the buttons with words to appear
         WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
+        # Getting the number of buttons with words:
+        old_number = len(self.ma.get_word_buttons_list())
         # Clicking the right button:
         self.ma.click_the_proper_button()
         # Waiting for the additional buttons to appear:
@@ -148,8 +151,12 @@ class MainActivityTest(BaseTest):
         self.ma.click_bdalej_button()
         # Waiting for the new word buttons to appear:
         sleep(2)
-        wb_list = self.ma.get_word_buttons_list()
-        test_fail_1 = not (len(wb_list) > 0)
+
+        # Checking the test conditions, one by one:
+
+        # Did new buttons appear?
+        new_number = len(self.ma.get_word_buttons_list())
+        test_fail_1 = not (new_number > 0)
 
         # Checking whether the buttons under the picture disappeared:
         try:
@@ -164,7 +171,10 @@ class MainActivityTest(BaseTest):
         except NoSuchElementException:
             test_fail_3 = False
 
-        test_fail = test_fail_1 or test_fail_2 or test_fail_3
+        # Are the numbers of new and old buttons the same?
+        test_fail_4 = not (old_number == new_number)
+
+        test_fail = test_fail_1 or test_fail_2 or test_fail_3 or test_fail_4
 
         if test_fail:
             screen_shot(self, "Error while moving to the next exercise")
@@ -174,6 +184,7 @@ class MainActivityTest(BaseTest):
         if test_fail_1: reason.append("new word buttons did not appear")
         if test_fail_2: reason.append("green arrow button still present")
         if test_fail_3: reason.append("@ button still present")
+        if test_fail_4: reason.append("numbers of buttons in old and new exercise differ")
 
         self.assertFalse(test_fail, f"Error while moving to the next exercise! Reason: {reason}")
 
