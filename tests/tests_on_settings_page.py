@@ -43,7 +43,7 @@ class SettingsPageTest(BaseTest):
         curr_level = int(self.sa.get_poziom_view().text)
         self.assertTrue(curr_level == minl, "Minimum difficulty level set below allowed limit!")
 
-    def test_numbers_of_buttons_equals_difficulty_level(self):
+    def test_number_of_buttons_equals_difficulty_level(self):
+        """
         """
 
-        """
