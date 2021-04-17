@@ -17,5 +17,9 @@ class SettingsAcctivityLocators():
     BMINUS = (By.ID, 'autyzmsoft.pl.profmarcin:id/btn_Minus')
     BPLUS = (By.ID, 'autyzmsoft.pl.profmarcin:id/btn_Plus')
     POZIOM = (By.ID, 'autyzmsoft.pl.profmarcin:id/tv_Poziom')
+    RB_NOSOUND = (By.ID, 'autyzmsoft.pl.profmarcin:id/rb_noSound')
+    BINFO = (By.ID, 'autyzmsoft.pl.profmarcin:id/bInfo')
+    ACTION_BAR_TITLE = (By.ID, 'android:id/action_bar_title')
+
 
 

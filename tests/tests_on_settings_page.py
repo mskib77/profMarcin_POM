@@ -1,4 +1,8 @@
 import unittest
+
+from appium.webdriver.common.touch_action import TouchAction
+from selenium.common.exceptions import NoSuchElementException
+from ddt import ddt, data, unpack
 from time import sleep
 from random import randint
 from selenium.webdriver.support.wait import WebDriverWait
@@ -6,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from locators import MainActivityLocators, SettingsAcctivityLocators
 from tests.base_test import BaseTest
 
-
+@ddt
 class SettingsPageTest(BaseTest):
     # difficulty levels
     MAX_LEVEL = 6
@@ -22,79 +26,77 @@ class SettingsPageTest(BaseTest):
         self.ma.long_touch_on_image()
         WebDriverWait(self.driver, 5).until(EC.presence_of_element_located(SettingsAcctivityLocators.POZIOM))
 
+    def __perform_difficulty_change(self, target_level):
+        """
+        Auxiliary; Changes difficulty level to target_level while on Settings Activity
+        """
+        maxl = SettingsPageTest.MAX_LEVEL
+        minl = SettingsPageTest.MIN_LEVEL
+
+        # parameter sanitization:
+        if target_level not in range(minl, maxl + 1):
+            raise ValueError(f"difficulty level must be betweem {maxl} and {minl}")
+
+        curr_level = int(self.sa.get_poziom_view().text)
+        delta = curr_level - target_level
+
+        if delta > 0:
+            btn_to_click = self.sa.get_bminus_button()
+        else:
+            btn_to_click = self.sa.get_bplus_button()
+
+        for i in range(0, abs(delta)):
+            btn_to_click.click()
+            sleep(0.5)
+
     @unittest.skip
     def test_increase_level_above_upper_limit(self):
         maxl = SettingsPageTest.MAX_LEVEL
+        self.__perform_difficulty_change(maxl)
         bplus = self.sa.get_bplus_button()
-        curr_level = int(self.sa.get_poziom_view().text)
-        # Trying to exceed MAX_LEVEL:
-        for i in range(curr_level, maxl + 1):
-            bplus.click()
-            sleep(0.5)
+        bplus.click()
+        sleep(0.5)
         curr_level = int(self.sa.get_poziom_view().text)
         self.assertTrue(curr_level == maxl, "Maximum difficulty level set beyond allowed limit!")
 
     @unittest.skip
     def test_decrease_level_below_lower_limit(self):
         minl = SettingsPageTest.MIN_LEVEL
+        self.__perform_difficulty_change(minl)
         bminus = self.sa.get_bminus_button()
-        curr_level = int(self.sa.get_poziom_view().text)
-        # Trying to go below MIN_LEVEL:
-        for i in range(curr_level, minl - 1, -1):
-            bminus.click()
-            sleep(0.5)
+        bminus.click()
+        sleep(0.5)
         curr_level = int(self.sa.get_poziom_view().text)
         self.assertTrue(curr_level == minl, "Minimum difficulty level set below allowed limit!")
 
-    def test_number_of_buttons_equals_difficulty_level(self):
+    @unittest.skip
+    @data(1,3,6)
+    def test_number_of_buttons_equals_difficulty_level(self, diff_level):
         """
-        Sets the number of buttons to a random value between MIN_LEVEL and MAX_LEVEL (both included)
+        Sets the number of buttons to a diff_level
         Then checks if there appear the same number of buttons on MainActivity
-        The proces is repeated N-times for better testing
         """
-        N = 3
-        for i in range(0,N):
-           self.__perform_difficulty_change_checking()
-           self.tearDown()
-           super().setUp()
-           sleep(3)
-           self.__go_to_settings_page()
-
-
-
-    def __perform_difficulty_change_checking(self):
-
-        maxl = SettingsPageTest.MAX_LEVEL
-        minl = SettingsPageTest.MIN_LEVEL
-
-        bminus = self.sa.get_bminus_button()
-        bplus = self.sa.get_bminus_button()
-        curr_level = int(self.sa.get_poziom_view().text)
-
-        # Setting randowm dificulty level:
-        while True:  # ensures the generated random number is different from what we initially see on the screen
-            rnd_level = randint(1, 6)
-            if rnd_level != curr_level: break
-        delta = curr_level - rnd_level
-        if delta > 0:
-            klawisz = self.sa.get_bminus_button()
-        else:
-            klawisz = self.sa.get_bplus_button()
-
-        print("rnd_level = ",rnd_level)
-        print(f"delta: {delta}")
-        print("naciskam klawisz ze znakiem ",klawisz.text )
-        for i in range(0, abs(delta)):
-            klawisz.click()
-            sleep(0.5)
-
-        # Going back to MainActivity and checking the number of buttons:
+        self.__perform_difficulty_change(diff_level)
+        # Going to Main Acctivity:
         self.driver.back()
         WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
         wb_list = self.ma.get_word_buttons_list()
         wb_count = len(wb_list)
         sleep(2)
-        self.assertTrue(rnd_level == wb_count, "Poziom trudnosci i liczba buttonow nie zgadzają się!")
+        self.assertTrue(wb_count == diff_level, f"Difficulty level ({diff_level}) and the number of word buttons ({wb_count}) do not match!")
+
+    def test_switching_to_info_activity(self):
+        """
+        Can switch to Info?
+        Passed if there are "android:id/action_bar_title informacje o aplikacji" elements in the activity we switch to.
+        """
+        binfo = self.sa.get_info_button()
+        binfo.click()
+        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(SettingsAcctivityLocators.ACTION_BAR_TITLE))
+        # ab_text = self.sa.get
+
+        sleep(2)
 
 
-
+if __name__ == '__main__':
+    unittest.main()
