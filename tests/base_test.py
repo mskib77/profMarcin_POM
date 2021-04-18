@@ -10,6 +10,7 @@ PATH = lambda p: os.path.abspath(
     os.path.join(os.path.dirname(__file__), p)
 )
 
+WAIT_TIME = 10
 
 class BaseTest(unittest.TestCase):
     """
@@ -21,13 +22,19 @@ class BaseTest(unittest.TestCase):
         desired_caps = {}
         desired_caps['platformName'] = 'Android'
         desired_caps['deviceName'] = 'emulator-554'
+        # desired_caps['deviceName'] = '5210f505ea6b8467' # moj nowy telefon
         desired_caps['app'] = PATH('ProfMarcin.apk')
         desired_caps['appPackage'] = 'autyzmsoft.pl.profmarcin'
         desired_caps['appActivity'] = 'autyzmsoft.pl.profmarcin.MainActivity'
         desired_caps['autoGrantPermissions'] = 'true'
+
+        desired_caps['automationName'] = 'UiAutomator2'
+
+
+
         self.driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
         self.driver.update_settings({"allowInvisibleElements": True})
-        self.driver.implicitly_wait(10)
+        self.driver.implicitly_wait(WAIT_TIME)
         self.driver.find_element(By.ID, "autyzmsoft.pl.profmarcin:id/btn_OK").click()
         '''
         SUT objects (=activities) creation:

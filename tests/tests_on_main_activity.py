@@ -66,7 +66,7 @@ class MainActivityTest(BaseTest):
 
         self.assertTrue(test_ok, "\n" + test_name + "\n" + msg1 + " or " + msg2 + ". See picture.")
 
-    @unittest.skip
+    unittest.skip
     def test_switching_to_settings(self):
         """
         Can switch to Settings?

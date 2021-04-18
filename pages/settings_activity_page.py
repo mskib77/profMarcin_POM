@@ -1,6 +1,7 @@
 from selenium.common.exceptions import NoSuchElementException
 
 from locators import SettingsAcctivityLocators
+from tests.base_test import WAIT_TIME
 
 
 class SettingsActivity():
@@ -44,7 +45,7 @@ class SettingsActivity():
         self.driver.implicitly_wait(2)
 
         found = False
-        while (found == False):
+        while not found:
             try:
                 self.driver.find_element(*SettingsAcctivityLocators.BINFO)
                 found = True
@@ -52,7 +53,7 @@ class SettingsActivity():
                 self.driver.swipe(startx, starty, startx, endy, 1000);
 
         # restoring timeout:
-        self.driver.implicitly_wait(10)
+        self.driver.implicitly_wait(WAIT_TIME)
 
     def get_info_button(self):
         self.__scroll_to_info_button()
