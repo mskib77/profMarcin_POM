@@ -70,7 +70,7 @@ class SettingsPageTest(BaseTest):
         self.assertTrue(curr_level == minl, "Minimum difficulty level set below allowed limit!")
 
     @unittest.skip
-    @data(1,3,6)
+    @data(1, 3, 6)
     def test_number_of_buttons_equals_difficulty_level(self, diff_level):
         """
         Sets the number of buttons to a diff_level

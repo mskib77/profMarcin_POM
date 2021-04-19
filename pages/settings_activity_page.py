@@ -1,10 +1,9 @@
 from selenium.common.exceptions import NoSuchElementException
-
 from locators import SettingsAcctivityLocators
-from tests.base_test import WAIT_TIME
+from tests.helpers.auxiliaries import WAIT_TIME
 
 
-class SettingsActivity():
+class SettingsActivity:
 
     def __init__(self, sterownik):
         self.driver = sterownik
