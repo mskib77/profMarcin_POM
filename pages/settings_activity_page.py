@@ -1,6 +1,6 @@
 from selenium.common.exceptions import NoSuchElementException
 from locators import SettingsAcctivityLocators
-from tests.helpers.auxiliaries import WAIT_TIME
+from tests.helpers.auxiliaries import Auxiliaries
 
 
 class SettingsActivity:
@@ -34,25 +34,25 @@ class SettingsActivity:
     def __scroll_to_info_button(self):
         """Auxiliary: scrolling down till the INFO button appears"""
 
+        # screen dimensions:
         size: dict = self.driver.get_window_size()
-        startx = size['width'] / 2;
-        starty = (int)(size['height'] * 0.9);
-        # endx = size['width'] / 2;
-        endy = (int)(size['height'] * 0.2);
+        startx = size['width'] / 2
+        starty = int(size['height'] * 0.9)
+        # endx = size['width'] / 2
+        endy = int(size['height'] * 0.2)
 
         # speeding up a little:
         self.driver.implicitly_wait(2)
-
+        # scrolling down till the INFO button appears:
         found = False
         while not found:
             try:
                 self.driver.find_element(*SettingsAcctivityLocators.BINFO)
                 found = True
             except NoSuchElementException:
-                self.driver.swipe(startx, starty, startx, endy, 1000);
-
+                self.driver.swipe(startx, starty, startx, endy, 1000)
         # restoring timeout:
-        self.driver.implicitly_wait(WAIT_TIME)
+        self.driver.implicitly_wait(Auxiliaries.WAIT_TIME)
 
     def get_info_button(self):
         self.__scroll_to_info_button()

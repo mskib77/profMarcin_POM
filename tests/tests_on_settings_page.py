@@ -1,14 +1,14 @@
 import unittest
 
-from appium.webdriver.common.touch_action import TouchAction
-from selenium.common.exceptions import NoSuchElementException
-from ddt import ddt, data, unpack
+from ddt import ddt, data
 from time import sleep
-from random import randint
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
 from locators import MainActivityLocators, SettingsAcctivityLocators
 from tests.base_test import BaseTest
+from tests.helpers.auxiliaries import Auxiliaries
+
 
 @ddt
 class SettingsPageTest(BaseTest):
@@ -17,6 +17,7 @@ class SettingsPageTest(BaseTest):
     MIN_LEVEL = 1
 
     def setUp(self):
+        """Going to Settings Activity before each test"""
         super().setUp()
         self.__go_to_settings_page()
 
@@ -49,7 +50,7 @@ class SettingsPageTest(BaseTest):
             btn_to_click.click()
             sleep(0.5)
 
-    @unittest.skip
+    # @unittest.skip
     def test_increase_level_above_upper_limit(self):
         maxl = SettingsPageTest.MAX_LEVEL
         self.__perform_difficulty_change(maxl)
@@ -59,7 +60,7 @@ class SettingsPageTest(BaseTest):
         curr_level = int(self.sa.get_poziom_view().text)
         self.assertTrue(curr_level == maxl, "Maximum difficulty level set beyond allowed limit!")
 
-    @unittest.skip
+    # @unittest.skip
     def test_decrease_level_below_lower_limit(self):
         minl = SettingsPageTest.MIN_LEVEL
         self.__perform_difficulty_change(minl)
@@ -69,7 +70,7 @@ class SettingsPageTest(BaseTest):
         curr_level = int(self.sa.get_poziom_view().text)
         self.assertTrue(curr_level == minl, "Minimum difficulty level set below allowed limit!")
 
-    @unittest.skip
+    # @unittest.skip
     @data(1, 3, 6)
     def test_number_of_buttons_equals_difficulty_level(self, diff_level):
         """
@@ -79,11 +80,12 @@ class SettingsPageTest(BaseTest):
         self.__perform_difficulty_change(diff_level)
         # Going to Main Acctivity:
         self.driver.back()
-        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
+        WebDriverWait(self.driver, Auxiliaries.WAIT_TIME).until(EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
         wb_list = self.ma.get_word_buttons_list()
         wb_count = len(wb_list)
         sleep(2)
-        self.assertTrue(wb_count == diff_level, f"Difficulty level ({diff_level}) and the number of word buttons ({wb_count}) do not match!")
+        self.assertTrue(wb_count == diff_level,
+                        f"Difficulty level ({diff_level}) and the number of word buttons ({wb_count}) do not match!")
 
     def test_switching_to_info_activity(self):
         """
@@ -92,10 +94,16 @@ class SettingsPageTest(BaseTest):
         """
         binfo = self.sa.get_info_button()
         binfo.click()
-        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(SettingsAcctivityLocators.ACTION_BAR_TITLE))
-        # ab_text = self.sa.get
+        try:
+            WebDriverWait(self.driver, Auxiliaries.WAIT_TIME).until(EC.presence_of_element_located(SettingsAcctivityLocators.ACTION_BAR_TITLE))
+        except NoSuchElementException:
+            test_ok = False
+        else:
+            test_ok = True
+        finally:
+            sleep(2)
 
-        sleep(2)
+        self.assertTrue(test_ok, "Info activity did not appear!")
 
 
 if __name__ == '__main__':

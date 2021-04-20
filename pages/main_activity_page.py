@@ -53,7 +53,6 @@ class MainActivity():
         b_dalej = self.get_bdalej_button()
         b_dalej.click()
 
-
     def get_guessed_word(self):
         guessed_word = self.driver.find_element(*MainActivityLocators.WORD_TO_BE_GUESSED_BY_ID).text
         return guessed_word
