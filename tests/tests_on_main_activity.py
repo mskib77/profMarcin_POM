@@ -28,6 +28,17 @@ class MainActivityTest(BaseTest):
         self.assertTrue(guessed_word_on_buttons,
                         "test_guessed_word_presence_on_buttons(): No proper word on any button!")
 
+    def __are_additional_buttons_present(self):
+        """Auxiliary; checks whether buttons Dalej and @ are present on the screen"""
+        add_buttons_present: bool = True
+        try:
+            bdalej = self.ma.get_bdalej_button()
+            bagain = self.ma.get_bagain_button()
+        except NoSuchElementException:
+            add_buttons_present = False
+
+        return add_buttons_present
+
     # @unittest.skip
     def test_proper_behaviour_after_right_word_button_clicked(self):
         """
@@ -41,14 +52,10 @@ class MainActivityTest(BaseTest):
         wb_list, guessed_word = self.ma.click_the_proper_button()
         # Checking whether additional buttons appeared:
         sleep(2)
-        additional_buttons_ok: bool = True
-        try:
-            bdalej = self.ma.get_bdalej_button()
-            bagain = self.ma.get_bagain_button()
-        except NoSuchElementException:
-            additional_buttons_ok = False
 
-        # Checking whether buttons that contains incorrect words have been disabled:
+        additional_buttons_present = self.__are_additional_buttons_present()
+
+        # Checking whether ALL the buttons that contains incorrect words have been disabled:
         disabled_buttons_ok: bool = True
         for b in wb_list:
             if b.text != guessed_word:
@@ -61,15 +68,14 @@ class MainActivityTest(BaseTest):
         msg1 = 'Additional buttons missing'
         msg2 = 'Buttons improperly disabled'
 
-        test_ok = additional_buttons_ok and disabled_buttons_ok
+        test_ok = additional_buttons_present and disabled_buttons_ok
 
         if not test_ok:
             Auxiliaries.screen_shot(self.driver, test_name)
 
         self.assertTrue(test_ok, "\n" + test_name + "\n" + msg1 + " or " + msg2 + ". See picture.")
 
-    unittest.skip
-
+    # @unittest.skip
     def test_switching_to_settings(self):
         """
         Can switch to Settings?
@@ -162,7 +168,7 @@ class MainActivityTest(BaseTest):
 
         # Checking the test conditions 1,2,3,4, one by one:
 
-        # 1.Did new buttons appear?
+        # 1.Did new word buttons appear?
         new_number = len(self.ma.get_word_buttons_list())
         test_fail_1 = not (new_number > 0)
 
@@ -171,25 +177,16 @@ class MainActivityTest(BaseTest):
         # (speeding up a bit, because in proper condition the buttons in question are not present)
         self.driver.implicitly_wait(Auxiliaries.WAIT_TIME / 5)
         # (end speeding up)
-        try:
-            self.ma.get_bdalej_button()
-            test_fail_2 = True
-        except NoSuchElementException:
-            test_fail_2 = False
 
-        try:
-            self.ma.get_bagain_button()
-            test_fail_3 = True
-        except NoSuchElementException:
-            test_fail_3 = False
+        test_fail_2 = self.__are_additional_buttons_present()
 
         # restoring implicit wait time - just in case... ;)
         self.driver.implicitly_wait(Auxiliaries.WAIT_TIME)
 
         # 3.Are the numbers of new and old buttons the same?
-        test_fail_4 = not (old_number == new_number)
+        test_fail_3 = not (old_number == new_number)
 
-        test_fail = test_fail_1 or test_fail_2 or test_fail_3 or test_fail_4
+        test_fail = test_fail_1 or test_fail_2 or test_fail_3
 
         if test_fail:
             Auxiliaries.screen_shot(self.driver, "Error while moving to the next exercise")
@@ -197,36 +194,37 @@ class MainActivityTest(BaseTest):
         # 4.Determining the reason(s) of negative test:
         reason = []
         if test_fail_1: reason.append("new word buttons did not appear")
-        if test_fail_2: reason.append("green arrow button still present")
-        if test_fail_3: reason.append("@ button still present")
-        if test_fail_4: reason.append("numbers of buttons in old and new exercise differ")
+        if test_fail_2: reason.append("green arrow button and/or @ button still present")
+        if test_fail_3: reason.append("numbers of buttons in old and new exercises differ")
 
-        self.assertFalse(test_fail, f"Error while moving to the next exercise! Reason: {reason}")
+        self.assertFalse(test_fail, f"Error while moving to the next exercise! Reason: {reason} See picture.")
 
-    def __check_after_bad_click(self):
-        print("wchodze do procedurki....")
-        """Auxiliary; checks whether everyting's OK after clicking the wrong word button"""
-        # (speeding up a bit, because in proper condition additional buttons are not present)
+    def __check_after_bad_button_click(self, wb_list, guessed_word):
+        """Auxiliary; checks whether everything's OK, after we clicked the wrong word button"""
+        """additional buttons should not appear and no wrong word button should be disabled"""
+        # (speeding up a bit, because in proper conditions, additional buttons are not present)
         self.driver.implicitly_wait(Auxiliaries.WAIT_TIME / 5)
-        # (end speeding up)
-        print("przed klawiszami")
-        try:
-            bdalej = self.ma.get_bdalej_button()
+        # if buttons 'dalej' and '@' are present - that's bad... :
+        add_buttons_present = self.__are_additional_buttons_present()
+        self.driver.implicitly_wait(Auxiliaries.WAIT_TIME)
+        if add_buttons_present:
             return False
-        except NoSuchElementException:
-            return True
-        print("po bdalej")
-        bagain = self.ma.get_bagain_button()
-        print("po bagain")
-        if (bdalej is None) and (bagain is None):
-            return True
-        else:
-            return False
+        else:  # whether improper buttons are not disabled?:
+            print("teraz:")
+            list_of_improper = [bx.text != guessed_word for bx in wb_list]
+
+            print([b.text for b in list_of_improper])
+
+            for b in list_of_improper:
+                if b.get_attribute('enabled') == 'false':
+                    return False
+        # if we reached this point:
+        return True
 
     def test_proper_behaviour_after_improper_button_clicked(self):
-        """ How does it behave after clicking on improper button(s)?
+        """ How does it behave after we clicked on improper word button(s)?
         Passed if
-          1. additional buttons (buttons with @ and with green arrow DO NOT appear) AND
+          1. additional buttons (buttons with @ and with green arrow) do NOT appear AND
           2. no word button is disabled
         """
         # Waiting for the buttons with words to appear
@@ -235,15 +233,24 @@ class MainActivityTest(BaseTest):
         # Clicking all the word buttons except the right one(s):
         guessed_word = self.ma.get_guessed_word()
         wb_list = self.ma.get_word_buttons_list()
-        print(guessed_word)
-        print([el.text for el in wb_list])
+
+        print("tu0")
+        print([b.text for b in wb_list])
+        list_ski = [b.text for b in wb_list]
+        print("tu1")
         for b in wb_list:
+            print("tu2")
+
             if b.text != guessed_word:
+
+                print("tu3")
+
                 b.click()
                 sleep(1)
-                test_ok = self.__check_after_bad_click()
+                test_ok = self.__check_after_bad_button_click(wb_list, guessed_word)
                 if not test_ok: break
         self.assertTrue(test_ok, "Improper behavior after clicking wrong word button!")
+
 
 if __name__ == '__main__':
     unittest.main()
