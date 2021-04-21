@@ -1,5 +1,5 @@
 from selenium.common.exceptions import NoSuchElementException
-from locators import SettingsAcctivityLocators
+from locators import SettingsActivityLocators
 from tests.helpers.auxiliaries import Auxiliaries
 
 
@@ -20,15 +20,15 @@ class SettingsActivity:
         return checkable_list is not []
 
     def get_bplus_button(self):
-        bplus = self.driver.find_element(*SettingsAcctivityLocators.BPLUS)
+        bplus = self.driver.find_element(*SettingsActivityLocators.BPLUS)
         return bplus
 
     def get_bminus_button(self):
-        bminus = self.driver.find_element(*SettingsAcctivityLocators.BMINUS)
+        bminus = self.driver.find_element(*SettingsActivityLocators.BMINUS)
         return bminus
 
     def get_poziom_view(self):
-        vpoziom = self.driver.find_element(*SettingsAcctivityLocators.POZIOM)
+        vpoziom = self.driver.find_element(*SettingsActivityLocators.POZIOM)
         return vpoziom
 
     def __scroll_to_info_button(self):
@@ -42,12 +42,12 @@ class SettingsActivity:
         endy = int(size['height'] * 0.2)
 
         # speeding up a little:
-        self.driver.implicitly_wait(2)
+        self.driver.implicitly_wait(1)
         # scrolling down till the INFO button appears:
         found = False
         while not found:
             try:
-                self.driver.find_element(*SettingsAcctivityLocators.BINFO)
+                self.driver.find_element(*SettingsActivityLocators.BINFO)
                 found = True
             except NoSuchElementException:
                 self.driver.swipe(startx, starty, startx, endy, 1000)
@@ -56,5 +56,5 @@ class SettingsActivity:
 
     def get_info_button(self):
         self.__scroll_to_info_button()
-        binfo = self.driver.find_element(*SettingsAcctivityLocators.BINFO)
+        binfo = self.driver.find_element(*SettingsActivityLocators.BINFO)
         return binfo

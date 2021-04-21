@@ -2,19 +2,19 @@ import unittest
 from time import sleep
 
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.wait import WebDriverWait
 
-from locators import MainActivityLocators, SettingsAcctivityLocators
+from locators import MainActivityLocators, SettingsActivityLocators
 from tests.base_test import BaseTest
 from tests.helpers.auxiliaries import Auxiliaries
 
 
 class MainActivityTest(BaseTest):
 
-    @unittest.skip
+    # @unittest.skip
     def test_guessed_word_present_on_buttons(self):
-        # waiting for buttons with words to appear
+        # waiting for the buttons with words to appear
         WebDriverWait(self.driver, Auxiliaries.WAIT_TIME).until(
             EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
         wb_list = self.ma.get_word_buttons_list()
@@ -39,8 +39,8 @@ class MainActivityTest(BaseTest):
 
         return add_buttons_present
 
-    @unittest.skip
-    def test_proper_behaviour_after_right_word_button_clicked(self):
+    # @unittest.skip
+    def test_proper_behaviour_after_proper_button_clicked(self):
         """
         After clicking the button with guessed word, additional buttons should appear
         and incorrect buttons should be disabled.
@@ -55,7 +55,7 @@ class MainActivityTest(BaseTest):
 
         additional_buttons_present = self.__are_additional_buttons_present()
 
-        # Checking whether ALL the buttons that contains incorrect words have been disabled:
+        # Checking whether ALL the buttons that contain incorrect words have been disabled:
         disabled_buttons_ok: bool = True
         for b in wb_list:
             if b.text != guessed_word:
@@ -75,19 +75,21 @@ class MainActivityTest(BaseTest):
 
         self.assertTrue(test_ok, "\n" + test_name + "\n" + msg1 + " or " + msg2 + ". See picture.")
 
-    @unittest.skip
+    # @unittest.skip
     def test_switching_to_settings(self):
         """
         Can switch to Settings?
         Passed if there are checkable elements in the activity we switch to.
         """
-        WebDriverWait(self.driver, 5).until(EC.presence_of_element_located(MainActivityLocators.IMAGE_AREA))
+        WebDriverWait(self.driver, Auxiliaries.WAIT_TIME).until(
+            EC.presence_of_element_located(MainActivityLocators.IMAGE_AREA))
         self.ma.long_touch_on_image()
-        WebDriverWait(self.driver, 5).until(EC.presence_of_element_located(SettingsAcctivityLocators.POZIOM))
+        WebDriverWait(self.driver, Auxiliaries.WAIT_TIME).until(
+            EC.presence_of_element_located(SettingsActivityLocators.POZIOM))
         list_not_empty = self.sa.settings_elements_present()
         self.assertTrue(list_not_empty, "Settings did not appear!")
 
-    @unittest.skip
+    # @unittest.skip
     def test_clicking_on_At_button(self):
         """
         What happens after we click on @ button.
@@ -142,7 +144,7 @@ class MainActivityTest(BaseTest):
 
         self.assertFalse(test_fail, f"Improper behaviour after clicking @ button! Reason: {reason}")
 
-    @unittest.skip
+    # @unittest.skip
     def test_moving_to_next_exercise(self):
         """
         What happens after we click on the button with green arrow.
@@ -243,8 +245,6 @@ class MainActivityTest(BaseTest):
             Auxiliaries.screen_shot(self.driver, "Improper behavior after clicking a wrong word button")
 
         self.assertTrue(test_ok, "Improper behavior after clicking a wrong word button! See picture.")
-
-
 
 
 if __name__ == '__main__':

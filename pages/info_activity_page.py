@@ -9,3 +9,7 @@ class InfoActivity:
     def get_action_bar_title(self):
         action_bar_tile = self.driver.find_element(*InfoActivityLocators.ACTION_BAR_TITLE)
         return action_bar_tile
+
+    def get_start_button(self):
+        bstart = self.driver.find_element(*InfoActivityLocators.BSTART)
+        return bstart

@@ -12,7 +12,7 @@ class MainActivityLocators:
     BDALEJ = (By.ID, 'autyzmsoft.pl.profmarcin:id/bDalej')
 
 
-class SettingsAcctivityLocators:
+class SettingsActivityLocators:
     BMINUS = (By.ID, 'autyzmsoft.pl.profmarcin:id/btn_Minus')
     BPLUS = (By.ID, 'autyzmsoft.pl.profmarcin:id/btn_Plus')
     POZIOM = (By.ID, 'autyzmsoft.pl.profmarcin:id/tv_Poziom')
@@ -22,3 +22,4 @@ class SettingsAcctivityLocators:
 
 class InfoActivityLocators:
     ACTION_BAR_TITLE = (By.ID, 'android:id/action_bar_title')
+    BSTART = (By.ID, 'autyzmsoft.pl.profmarcin:id/bStart')
