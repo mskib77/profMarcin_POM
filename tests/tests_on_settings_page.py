@@ -5,7 +5,7 @@ from time import sleep
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
-from locators import MainActivityLocators, SettingsAcctivityLocators
+from locators import MainActivityLocators, SettingsAcctivityLocators, InfoActivityLocators
 from tests.base_test import BaseTest
 from tests.helpers.auxiliaries import Auxiliaries
 
@@ -80,7 +80,8 @@ class SettingsPageTest(BaseTest):
         self.__perform_difficulty_change(diff_level)
         # Going to Main Acctivity:
         self.driver.back()
-        WebDriverWait(self.driver, Auxiliaries.WAIT_TIME).until(EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
+        WebDriverWait(self.driver, Auxiliaries.WAIT_TIME).until(
+            EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
         wb_list = self.ma.get_word_buttons_list()
         wb_count = len(wb_list)
         sleep(2)
@@ -90,16 +91,21 @@ class SettingsPageTest(BaseTest):
     def test_switching_to_info_activity(self):
         """
         Can switch to Info?
-        Passed if there are "android:id/action_bar_title informacje o aplikacji" elements in the activity we switch to.
+        Passed if
+        1. there is "android:id/action_bar_title element in the activity we switch to AND
+        2. it contains  "Informacje o aplikacji" text
         """
         binfo = self.sa.get_info_button()
         binfo.click()
+        test_ok = False
         try:
-            WebDriverWait(self.driver, Auxiliaries.WAIT_TIME).until(EC.presence_of_element_located(SettingsAcctivityLocators.ACTION_BAR_TITLE))
+            WebDriverWait(self.driver, Auxiliaries.WAIT_TIME).until(
+                EC.presence_of_element_located(InfoActivityLocators.ACTION_BAR_TITLE))
+            el = self.ia.get_action_bar_title()
+            if el.text.upper() == "Informacje o aplikacji".upper():
+                test_ok = True
         except NoSuchElementException:
             test_ok = False
-        else:
-            test_ok = True
         finally:
             sleep(2)
 

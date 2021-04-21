@@ -37,12 +37,12 @@ class MainActivity():
 
     def click_the_proper_button(self):
         """
-        Auxiliary - clicking the button with right word on it.
+        Clicking the button with right word on it.
         Returns the list of words buttons and the guessed word.
         """
         guessed_word = self.get_guessed_word()
         wb_list = self.get_word_buttons_list()
-        # Clicking one by one until the correct button:
+        # Going down one by one until the correct button:
         for b in wb_list:
             if b.text == guessed_word:
                 b.click()

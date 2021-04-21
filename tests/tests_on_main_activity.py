@@ -12,7 +12,7 @@ from tests.helpers.auxiliaries import Auxiliaries
 
 class MainActivityTest(BaseTest):
 
-    # @unittest.skip
+    @unittest.skip
     def test_guessed_word_present_on_buttons(self):
         # waiting for buttons with words to appear
         WebDriverWait(self.driver, Auxiliaries.WAIT_TIME).until(
@@ -39,7 +39,7 @@ class MainActivityTest(BaseTest):
 
         return add_buttons_present
 
-    # @unittest.skip
+    @unittest.skip
     def test_proper_behaviour_after_right_word_button_clicked(self):
         """
         After clicking the button with guessed word, additional buttons should appear
@@ -75,7 +75,7 @@ class MainActivityTest(BaseTest):
 
         self.assertTrue(test_ok, "\n" + test_name + "\n" + msg1 + " or " + msg2 + ". See picture.")
 
-    # @unittest.skip
+    @unittest.skip
     def test_switching_to_settings(self):
         """
         Can switch to Settings?
@@ -87,7 +87,7 @@ class MainActivityTest(BaseTest):
         list_not_empty = self.sa.settings_elements_present()
         self.assertTrue(list_not_empty, "Settings did not appear!")
 
-    # @unittest.skip
+    @unittest.skip
     def test_clicking_on_At_button(self):
         """
         What happens after we click on @ button.
@@ -142,6 +142,7 @@ class MainActivityTest(BaseTest):
 
         self.assertFalse(test_fail, f"Improper behaviour after clicking @ button! Reason: {reason}")
 
+    @unittest.skip
     def test_moving_to_next_exercise(self):
         """
         What happens after we click on the button with green arrow.
@@ -199,30 +200,27 @@ class MainActivityTest(BaseTest):
 
         self.assertFalse(test_fail, f"Error while moving to the next exercise! Reason: {reason} See picture.")
 
-    def __check_after_bad_button_click(self, wb_list, guessed_word):
+    def __check_after_bad_button_clicked(self, wb_list):
         """Auxiliary; checks whether everything's OK, after we clicked the wrong word button"""
-        """additional buttons should not appear and no wrong word button should be disabled"""
+        """expected cond.: additional buttons should not appear and no word button should be disabled"""
+        """Parameter: wb_list: list of buttons to check their enable state"""
         # (speeding up a bit, because in proper conditions, additional buttons are not present)
         self.driver.implicitly_wait(Auxiliaries.WAIT_TIME / 5)
-        # if buttons 'dalej' and '@' are present - that's bad... :
+        # If buttons 'dalej' and '@' are present - that's bad... :
         add_buttons_present = self.__are_additional_buttons_present()
+        # restoring WAIT_TIME:
         self.driver.implicitly_wait(Auxiliaries.WAIT_TIME)
         if add_buttons_present:
             return False
-        else:  # whether improper buttons are not disabled?:
-            print("teraz:")
-            list_of_improper = [bx.text != guessed_word for bx in wb_list]
-
-            print([b.text for b in list_of_improper])
-
-            for b in list_of_improper:
+        else:  # checking whether improper buttons are not disabled:
+            for b in wb_list:
                 if b.get_attribute('enabled') == 'false':
                     return False
         # if we reached this point:
         return True
 
     def test_proper_behaviour_after_improper_button_clicked(self):
-        """ How does it behave after we clicked on improper word button(s)?
+        """ How does it behave after we clicked on an improper word button(s)?
         Passed if
           1. additional buttons (buttons with @ and with green arrow) do NOT appear AND
           2. no word button is disabled
@@ -230,26 +228,23 @@ class MainActivityTest(BaseTest):
         # Waiting for the buttons with words to appear
         WebDriverWait(self.driver, Auxiliaries.WAIT_TIME).until(
             EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
-        # Clicking all the word buttons except the right one(s):
+        # Clicking all the word buttons except the right one(s) and performing check:
         guessed_word = self.ma.get_guessed_word()
         wb_list = self.ma.get_word_buttons_list()
-
-        print("tu0")
-        print([b.text for b in wb_list])
-        list_ski = [b.text for b in wb_list]
-        print("tu1")
         for b in wb_list:
-            print("tu2")
-
             if b.text != guessed_word:
-
-                print("tu3")
-
                 b.click()
                 sleep(1)
-                test_ok = self.__check_after_bad_button_click(wb_list, guessed_word)
-                if not test_ok: break
-        self.assertTrue(test_ok, "Improper behavior after clicking wrong word button!")
+                test_ok = self.__check_after_bad_button_clicked(wb_list)
+                if not test_ok:
+                    break
+
+        if not test_ok:
+            Auxiliaries.screen_shot(self.driver, "Improper behavior after clicking a wrong word button")
+
+        self.assertTrue(test_ok, "Improper behavior after clicking a wrong word button! See picture.")
+
+
 
 
 if __name__ == '__main__':

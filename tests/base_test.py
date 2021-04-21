@@ -3,6 +3,7 @@ import unittest
 from appium import webdriver
 from selenium.webdriver.common.by import By
 
+from pages.info_activity_page import InfoActivity
 from pages.main_activity_page import MainActivity
 from pages.settings_activity_page import SettingsActivity
 from tests.helpers.auxiliaries import Auxiliaries
@@ -39,6 +40,7 @@ class BaseTest(unittest.TestCase):
         '''
         self.ma = MainActivity(self.driver)
         self.sa = SettingsActivity(self.driver)
+        self.ia = InfoActivity(self.driver)
 
     def tearDown(self):
         print("tearDown z BaseTest")
