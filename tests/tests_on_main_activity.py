@@ -40,7 +40,7 @@ class MainActivityTest(BaseTest):
         return add_buttons_present
 
     # @unittest.skip
-    def test_proper_behaviour_after_proper_button_clicked(self):
+    def test_behaviour_after_proper_button_clicked(self):
         """
         After clicking the button with guessed word, additional buttons should appear
         and incorrect buttons should be disabled.
@@ -64,7 +64,7 @@ class MainActivityTest(BaseTest):
                     break
 
         # Preparing assertion messages and taking a shot of an error (if any):
-        test_name = 'test_proper_behaviour_after_right_word_button_clicked()'
+        test_name = 'test_behaviour_after_proper_button_clicked()'
         msg1 = 'Additional buttons missing'
         msg2 = 'Buttons improperly disabled'
 
@@ -140,7 +140,7 @@ class MainActivityTest(BaseTest):
         if test_fail_1: reason.append("different numbers of buttons")
         if test_fail_2: reason.append("different lists of words")
         if test_fail_3: reason.append("some buttons still disabled")
-        if test_fail_4: reason.append("change of the guessed word")
+        if test_fail_4: reason.append("guessed word changed")
 
         self.assertFalse(test_fail, f"Improper behaviour after clicking @ button! Reason: {reason}")
 
@@ -221,7 +221,7 @@ class MainActivityTest(BaseTest):
         # if we reached this point:
         return True
 
-    def test_proper_behaviour_after_improper_button_clicked(self):
+    def test_behaviour_after_improper_button_clicked(self):
         """ How does it behave after we clicked on an improper word button(s)?
         Passed if
           1. additional buttons (buttons with @ and with green arrow) do NOT appear AND

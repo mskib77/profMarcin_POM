@@ -26,8 +26,9 @@ class BaseTest(unittest.TestCase):
         desired_caps = {}
         desired_caps['platformName'] = 'Android'
 
-        # desired_caps['deviceName'] = 'emulator-554'
-        desired_caps['deviceName'] = '5210f505ea6b8467' # moj nowy telefon
+        desired_caps['deviceName'] = 'emulator-554'
+        # desired_caps['deviceName'] = '5210f505ea6b8467' # moj nowy telefon
+        # desired_caps['deviceName'] = '5200241cea6f7523'   # moj Stary telefon
 
         desired_caps['app'] = PATH('ProfMarcin.apk')
         desired_caps['appPackage'] = 'autyzmsoft.pl.profmarcin'
@@ -53,18 +54,12 @@ class BaseTest(unittest.TestCase):
 
     def __dismiss_splash_window(self):
         """ Clicks on OK to unlock Main Activity """
-        """ Note: OK buttom may not be visible on some devices, therefore scrolling"""
+        """ Note: OK button may not be visible on some devices, therefore scrolling """
 
-        sleep(5)
-
-        # screen dimensions:
-        size: dict = self.driver.get_window_size()
-        startx = size['width'] / 2
-        starty = int(size['height'] * 0.9)
-        # endx = size['width'] / 2
-        endy = int(size['height'] * 0.2)
-
-
+        x, y = Auxiliaries.get_screen_dimensions(self.driver)
+        # speeding up a little:
+        self.driver.implicitly_wait(1)
+        # scrolling down till the INFO button appears:
         found = False
         while not found:
             try:
@@ -72,8 +67,9 @@ class BaseTest(unittest.TestCase):
                 found = True
                 el.click()
             except NoSuchElementException:
-                # self.driver.swipe(100, 300, 100, 50, 1000)
-                self.driver.swipe(startx, starty, startx, endy, 1000)
+                self.driver.swipe(x/2, y/2, x/2, y/7, 500)
+        # restoring timeout:
+        self.driver.implicitly_wait(Auxiliaries.WAIT_TIME)
 
 
     def tearDown(self):

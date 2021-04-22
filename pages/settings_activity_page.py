@@ -34,13 +34,7 @@ class SettingsActivity:
     def __scroll_to_info_button(self):
         """Auxiliary: scrolling down till the INFO button appears"""
 
-        # screen dimensions:
-        size: dict = self.driver.get_window_size()
-        startx = size['width'] / 2
-        starty = int(size['height'] * 0.9)
-        # endx = size['width'] / 2
-        endy = int(size['height'] * 0.2)
-
+        x, y = Auxiliaries.get_screen_dimensions(self.driver)
         # speeding up a little:
         self.driver.implicitly_wait(1)
         # scrolling down till the INFO button appears:
@@ -50,7 +44,7 @@ class SettingsActivity:
                 self.driver.find_element(*SettingsActivityLocators.BINFO)
                 found = True
             except NoSuchElementException:
-                self.driver.swipe(startx, starty, startx, endy, 1000)
+                self.driver.swipe(x/2, y*0.9, x/2, y*0.1, 1000)
         # restoring timeout:
         self.driver.implicitly_wait(Auxiliaries.WAIT_TIME)
 

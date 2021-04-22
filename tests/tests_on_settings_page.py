@@ -52,7 +52,7 @@ class SettingsPageTest(BaseTest):
         bplus.click()
         sleep(0.5)
         curr_level = int(self.sa.get_poziom_view().text)
-        self.assertTrue(curr_level == maxl, "Maximum difficulty level set beyond allowed limit!")
+        self.assertTrue(curr_level == maxl, f"Difficulty level ({curr_level}) was set above allowed limit!")
 
       # @unittest.skip
     def test_decrease_level_below_lower_limit(self):
@@ -62,7 +62,7 @@ class SettingsPageTest(BaseTest):
         bminus.click()
         sleep(0.5)
         curr_level = int(self.sa.get_poziom_view().text)
-        self.assertTrue(curr_level == minl, "Minimum difficulty level set below allowed limit!")
+        self.assertTrue(curr_level == minl, f"Difficulty level ({curr_level}) was set below allowed limit!")
 
       # @unittest.skip
     @data(1, 3, 6)
@@ -85,7 +85,7 @@ class SettingsPageTest(BaseTest):
     def test_switching_to_info_activity(self):
         """
         Can switch to Info?
-        Passed if
+        Passed if:
         1. there is "android:id/action_bar_title element in the activity we switch to AND
         2. it contains  "Informacje o aplikacji" text
         """
