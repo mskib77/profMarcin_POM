@@ -94,7 +94,7 @@ class MainActivityTest(BaseTest):
         """
         What happens after we click on @ button.
         Passed if:
-        1. the number of new buttons equals the number of old buttons AND
+        1. the number of newly created buttons equals the number of old buttons AND
         2. the new word buttons list equals the old one (order NOT important) AND
         3. all the new buttons are enabled AND
         3. guessed word remains unchanged.

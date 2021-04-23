@@ -32,13 +32,6 @@ class Auxiliaries:
     @classmethod
     def get_screen_dimensions(cls, driver):
         """ Used before we start scrolling """
-        # size: dict = driver.get_window_size()
-        # startx = size['width'] / 2
-        # starty = int(size['height'] * 0.8)
-        # endx = size['width'] / 2
-        # endy = int(size['height'] * 0.4)
-        # return startx, starty, endx, endy
-
         size: dict = driver.get_window_size()
         x = size['width']
         y = size['height']

@@ -38,6 +38,7 @@ class BaseTest(unittest.TestCase):
         desired_caps['automationName'] = 'UiAutomator2'
 
         self.driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
+
         self.driver.update_settings({"allowInvisibleElements": True})
         self.driver.implicitly_wait(Auxiliaries.WAIT_TIME)
 
@@ -64,6 +65,7 @@ class BaseTest(unittest.TestCase):
         while not found:
             try:
                 el = self.driver.find_element(By.ID, "autyzmsoft.pl.profmarcin:id/btn_OK")
+
                 found = True
                 el.click()
             except NoSuchElementException:
