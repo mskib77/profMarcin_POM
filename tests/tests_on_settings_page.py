@@ -5,9 +5,9 @@ from time import sleep
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
-from locators import MainActivityLocators, SettingsActivityLocators, InfoActivityLocators
+from locators import MainActivityLocators, InfoActivityLocators
 from tests.base_test import BaseTest
-from tests.helpers.auxiliaries import Auxiliaries
+from tests.test_utils import TestUtils
 
 
 @ddt
@@ -19,7 +19,7 @@ class SettingsPageTest(BaseTest):
     def setUp(self):
         """Going to Settings Activity before each test"""
         super().setUp()
-        Auxiliaries.go_to_settings_page(self.driver, self.ma)
+        TestUtils.go_to_settings_page(self.driver, self.ma)
 
     def __perform_difficulty_change(self, target_level):
         """
@@ -74,7 +74,7 @@ class SettingsPageTest(BaseTest):
         self.__perform_difficulty_change(diff_level)
         # Going to Main Acctivity:
         self.driver.back()
-        WebDriverWait(self.driver, Auxiliaries.WAIT_TIME).until(
+        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(
             EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
         wb_list = self.ma.get_word_buttons_list()
         wb_count = len(wb_list)
@@ -93,7 +93,7 @@ class SettingsPageTest(BaseTest):
         binfo.click()
         test_ok = False
         try:
-            WebDriverWait(self.driver, Auxiliaries.WAIT_TIME).until(
+            WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(
                 EC.presence_of_element_located(InfoActivityLocators.ACTION_BAR_TITLE))
             el = self.ia.get_action_bar_title()
             if el.text.upper() == "Informacje o aplikacji".upper():

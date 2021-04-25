@@ -22,7 +22,7 @@ class MainActivity():
         action.long_press(image).perform()
 
     def get_word_buttons_list(self):
-        """Returns list of buttons with words"""
+        """Returns list of the buttons with words"""
         try:
             l_buttons = self.driver.find_elements(*MainActivityLocators.WORD_BUTTONS_LIST)
         except NoSuchElementException:

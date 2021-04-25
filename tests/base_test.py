@@ -1,6 +1,5 @@
 import os
 import unittest
-from time import sleep
 
 from appium import webdriver
 from selenium.webdriver.common.by import By
@@ -9,7 +8,7 @@ from selenium.common.exceptions import NoSuchElementException
 from pages.info_activity_page import InfoActivity
 from pages.main_activity_page import MainActivity
 from pages.settings_activity_page import SettingsActivity
-from tests.helpers.auxiliaries import Auxiliaries
+from tests.test_utils import TestUtils
 
 PATH = lambda p: os.path.abspath(
     os.path.join(os.path.dirname(__file__), p)
@@ -40,7 +39,7 @@ class BaseTest(unittest.TestCase):
         self.driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
 
         self.driver.update_settings({"allowInvisibleElements": True})
-        self.driver.implicitly_wait(Auxiliaries.WAIT_TIME)
+        self.driver.implicitly_wait(TestUtils.WAIT_TIME)
 
         self.__dismiss_splash_window()
 
@@ -57,7 +56,7 @@ class BaseTest(unittest.TestCase):
         """ Clicks on OK to unlock Main Activity """
         """ Note: OK button may not be visible on some devices, therefore scrolling """
 
-        x, y = Auxiliaries.get_screen_dimensions(self.driver)
+        x, y = TestUtils.get_screen_dimensions(self.driver)
         # speeding up a little:
         self.driver.implicitly_wait(1)
         # scrolling down till the INFO button appears:
@@ -71,7 +70,7 @@ class BaseTest(unittest.TestCase):
             except NoSuchElementException:
                 self.driver.swipe(x/2, y/2, x/2, y/7, 500)
         # restoring timeout:
-        self.driver.implicitly_wait(Auxiliaries.WAIT_TIME)
+        self.driver.implicitly_wait(TestUtils.WAIT_TIME)
 
 
     def tearDown(self):

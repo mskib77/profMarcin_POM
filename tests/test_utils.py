@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from locators import MainActivityLocators, SettingsActivityLocators, InfoActivityLocators
 
 
-class Auxiliaries:
+class TestUtils:
     WAIT_TIME = 10  # system-wide implicit wait
 
     @classmethod
