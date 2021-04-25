@@ -26,8 +26,8 @@ class BaseTest(unittest.TestCase):
         desired_caps = {}
         desired_caps['platformName'] = 'Android'
 
-        desired_caps['deviceName'] = 'emulator-554'
-        # desired_caps['deviceName'] = '5210f505ea6b8467' # moj nowy telefon
+        # desired_caps['deviceName'] = 'emulator-554'
+        desired_caps['deviceName'] = '5210f505ea6b8467' # moj nowy telefon
         # desired_caps['deviceName'] = '5200241cea6f7523'   # moj Stary telefon
 
         desired_caps['app'] = PATH('ProfMarcin.apk')

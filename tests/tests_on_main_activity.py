@@ -89,6 +89,13 @@ class MainActivityTest(BaseTest):
         list_not_empty = self.sa.settings_elements_present()
         self.assertTrue(list_not_empty, "Settings did not appear!")
 
+    @staticmethod
+    def __are_all_buttons_enabled(button_list):
+        for b in button_list:
+            is_b_disabled = (b.get_attribute('enabled') == 'false')
+            if is_b_disabled: return False
+        return True
+
     # @unittest.skip
     def test_clicking_on_At_button(self):
         """
@@ -97,7 +104,7 @@ class MainActivityTest(BaseTest):
         1. the number of newly created buttons equals the number of old buttons AND
         2. the new word buttons list equals the old one (order NOT important) AND
         3. all the new buttons are enabled AND
-        3. guessed word remains unchanged.
+        4. guessed word remains unchanged.
         """
         # Waiting for the buttons with words to appear
         WebDriverWait(self.driver, Auxiliaries.WAIT_TIME).until(
@@ -111,6 +118,7 @@ class MainActivityTest(BaseTest):
             EC.presence_of_element_located(MainActivityLocators.BAGAIN))
         # Clicking the @ button:
         self.ma.click_on_At_button()
+        sleep(1)
         # Waiting for the buttons with words to appear:
         WebDriverWait(self.driver, Auxiliaries.WAIT_TIME).until(
             EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
@@ -123,10 +131,7 @@ class MainActivityTest(BaseTest):
         # Checking the continton nr 2:
         test_fail_2 = not (sorted(w_list_new) == sorted(w_list_old))
         # Checking the continton nr 3:
-        test_fail_3 = False
-        for b in wb_list_new:
-            test_fail_3 = (b.get_attribute('enabled') == 'false')
-            if test_fail_3: break
+        test_fail_3 = not self.__are_all_buttons_enabled(wb_list_new)
         # Checking the condition nr 4:
         guessed_word_new = self.ma.get_guessed_word()
         test_fail_4 = not (guessed_word_new == guessed_word_old)
@@ -151,7 +156,8 @@ class MainActivityTest(BaseTest):
         Passed if:
         1.new word buttons appear AND
         2.buttons under the picture disappeared AND
-        3.the number of the new word buttons equals the number of the old ones.
+        3.the number of the new word buttons equals the number of the old ones AND
+        4.all newly created buttons are enabled.
         Note: picture may not be present; it is correct, do not test this.
         """
         # Waiting for the buttons with words to appear
@@ -161,18 +167,21 @@ class MainActivityTest(BaseTest):
         old_number = len(self.ma.get_word_buttons_list())
         # Clicking the right button:
         self.ma.click_the_proper_button()
-        # Waiting for the additional buttons to appear:
+        # Waiting for the button with green arrow to appear:
         WebDriverWait(self.driver, Auxiliaries.WAIT_TIME).until(
             EC.presence_of_element_located(MainActivityLocators.BDALEJ))
-        # Moving to the next exercise - clicking the button with a green arrow:
+        # Moving to the next exercise - clicking the button with green arrow:
         self.ma.click_bdalej_button()
-        # Waiting for the new word buttons to appear:
-        sleep(2)
+        # Waiting for the green arrow button to disappear and new word buttons to appear:
+        sleep(0.5)
+        WebDriverWait(self.driver, Auxiliaries.WAIT_TIME).until(
+            EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
 
         # Checking the test conditions 1,2,3,4, one by one:
 
         # 1.Did new word buttons appear?
-        new_number = len(self.ma.get_word_buttons_list())
+        new_wb_list = self.ma.get_word_buttons_list()
+        new_number = len(new_wb_list)
         test_fail_1 = not (new_number > 0)
 
         # 2.Checking whether the buttons under the picture disappeared,
@@ -189,7 +198,10 @@ class MainActivityTest(BaseTest):
         # 3.Are the numbers of new and old buttons the same?
         test_fail_3 = not (old_number == new_number)
 
-        test_fail = test_fail_1 or test_fail_2 or test_fail_3
+        # 4.Are all newly created buttons active/enabled
+        test_fail_4 = not self.__are_all_buttons_enabled(new_wb_list)
+
+        test_fail = test_fail_1 or test_fail_2 or test_fail_3 or test_fail_4
 
         if test_fail:
             Auxiliaries.screen_shot(self.driver, "Error while moving to the next exercise")
@@ -199,13 +211,14 @@ class MainActivityTest(BaseTest):
         if test_fail_1: reason.append("new word buttons did not appear")
         if test_fail_2: reason.append("green arrow button and/or @ button still present")
         if test_fail_3: reason.append("numbers of buttons in old and new exercises differ")
+        if test_fail_4: reason.append("not all new buttons enabled")
 
         self.assertFalse(test_fail, f"Error while moving to the next exercise! Reason: {reason} See picture.")
 
     def __check_after_bad_button_clicked(self, wb_list):
         """Auxiliary; checks whether everything's OK, after we clicked the wrong word button"""
         """expected cond.: additional buttons should not appear and no word button should be disabled"""
-        """Parameter: wb_list: list of buttons to check their enable state"""
+        """Parameter: wb_list: list of buttons to check their enabled state"""
         # (speeding up a bit, because in proper conditions, additional buttons are not present)
         self.driver.implicitly_wait(Auxiliaries.WAIT_TIME / 5)
         # If buttons 'dalej' and '@' are present - that's bad... :
@@ -215,11 +228,8 @@ class MainActivityTest(BaseTest):
         if add_buttons_present:
             return False
         else:  # checking whether improper buttons are not disabled:
-            for b in wb_list:
-                if b.get_attribute('enabled') == 'false':
-                    return False
-        # if we reached this point:
-        return True
+            all_enabled = self.__are_all_buttons_enabled(wb_list)
+            return all_enabled
 
     def test_behaviour_after_improper_button_clicked(self):
         """ How does it behave after we clicked on an improper word button(s)?
@@ -233,6 +243,7 @@ class MainActivityTest(BaseTest):
         # Clicking all the word buttons except the right one(s) and performing check:
         guessed_word = self.ma.get_guessed_word()
         wb_list = self.ma.get_word_buttons_list()
+        test_ok = True
         for b in wb_list:
             if b.text != guessed_word:
                 b.click()
