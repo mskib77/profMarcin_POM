@@ -28,7 +28,7 @@ class MainActivityTest(BaseTest):
         self.assertTrue(guessed_word_on_buttons,
                         "test_guessed_word_presence_on_buttons(): No proper word on any button!")
 
-    def __are_additional_buttons_present(self):
+    def _are_additional_buttons_present(self):
         """Auxiliary; checks whether buttons Dalej and @ are present on the screen"""
         add_buttons_present: bool = True
         try:
@@ -53,7 +53,7 @@ class MainActivityTest(BaseTest):
         # Checking whether additional buttons appeared:
         sleep(2)
 
-        additional_buttons_present = self.__are_additional_buttons_present()
+        additional_buttons_present = self._are_additional_buttons_present()
 
         # Checking whether ALL the buttons that contain incorrect words have been disabled:
         disabled_buttons_ok: bool = True
@@ -90,7 +90,7 @@ class MainActivityTest(BaseTest):
         self.assertTrue(list_not_empty, "Settings did not appear!")
 
     @staticmethod
-    def __are_all_buttons_enabled(button_list):
+    def _are_all_buttons_enabled(button_list):
         for b in button_list:
             is_b_disabled = (b.get_attribute('enabled') == 'false')
             if is_b_disabled: return False
@@ -131,7 +131,7 @@ class MainActivityTest(BaseTest):
         # Checking the continton nr 2:
         test_fail_2 = not (sorted(w_list_new) == sorted(w_list_old))
         # Checking the continton nr 3:
-        test_fail_3 = not self.__are_all_buttons_enabled(wb_list_new)
+        test_fail_3 = not self._are_all_buttons_enabled(wb_list_new)
         # Checking the condition nr 4:
         guessed_word_new = self.ma.get_guessed_word()
         test_fail_4 = not (guessed_word_new == guessed_word_old)
@@ -190,7 +190,7 @@ class MainActivityTest(BaseTest):
         self.driver.implicitly_wait(TestUtils.WAIT_TIME / 5)
         # (end speeding up)
 
-        test_fail_2 = self.__are_additional_buttons_present()
+        test_fail_2 = self._are_additional_buttons_present()
 
         # restoring implicit wait time - just in case... ;)
         self.driver.implicitly_wait(TestUtils.WAIT_TIME)
@@ -199,7 +199,7 @@ class MainActivityTest(BaseTest):
         test_fail_3 = not (old_number == new_number)
 
         # 4.Are all newly created buttons active/enabled
-        test_fail_4 = not self.__are_all_buttons_enabled(new_wb_list)
+        test_fail_4 = not self._are_all_buttons_enabled(new_wb_list)
 
         test_fail = test_fail_1 or test_fail_2 or test_fail_3 or test_fail_4
 
@@ -215,20 +215,20 @@ class MainActivityTest(BaseTest):
 
         self.assertFalse(test_fail, f"Error while moving to the next exercise! Reason: {reason} See picture.")
 
-    def __check_after_bad_button_clicked(self, wb_list):
+    def _check_after_bad_button_clicked(self, wb_list):
         """Auxiliary; checks whether everything's OK, after we clicked the wrong word button"""
         """expected cond.: additional buttons should not appear and no word button should be disabled"""
         """Parameter: wb_list: list of buttons to check their enabled state"""
         # (speeding up a bit, because in proper conditions, additional buttons are not present)
         self.driver.implicitly_wait(TestUtils.WAIT_TIME / 5)
         # If buttons 'dalej' and '@' are present - that's bad... :
-        add_buttons_present = self.__are_additional_buttons_present()
+        add_buttons_present = self._are_additional_buttons_present()
         # restoring WAIT_TIME:
         self.driver.implicitly_wait(TestUtils.WAIT_TIME)
         if add_buttons_present:
             return False
         else:  # checking whether improper buttons are not disabled:
-            all_enabled = self.__are_all_buttons_enabled(wb_list)
+            all_enabled = self._are_all_buttons_enabled(wb_list)
             return all_enabled
 
     def test_behaviour_after_improper_button_clicked(self):
@@ -248,7 +248,7 @@ class MainActivityTest(BaseTest):
             if b.text != guessed_word:
                 b.click()
                 sleep(1)
-                test_ok = self.__check_after_bad_button_clicked(wb_list)
+                test_ok = self._check_after_bad_button_clicked(wb_list)
                 if not test_ok:
                     break
 

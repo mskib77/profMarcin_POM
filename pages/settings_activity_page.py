@@ -8,7 +8,7 @@ class SettingsActivity:
     def __init__(self, sterownik):
         self.driver = sterownik
 
-    def __get_checkable_elements_list(self):
+    def _get_checkable_elements_list(self):
         try:
             list = self.driver.find_elements_by_android_uiautomator('new UiSelector().checkable(true)')
         except NoSuchElementException:
@@ -16,7 +16,7 @@ class SettingsActivity:
         return list
 
     def settings_elements_present(self):
-        checkable_list = self.__get_checkable_elements_list()
+        checkable_list = self._get_checkable_elements_list()
         return checkable_list is not []
 
     def get_bplus_button(self):
@@ -31,7 +31,7 @@ class SettingsActivity:
         vpoziom = self.driver.find_element(*SettingsActivityLocators.POZIOM)
         return vpoziom
 
-    def __scroll_to_info_button(self):
+    def _scroll_to_info_button(self):
         """Auxiliary: scrolling down till the INFO button appears"""
 
         x, y = TestUtils.get_screen_dimensions(self.driver)
@@ -49,6 +49,6 @@ class SettingsActivity:
         self.driver.implicitly_wait(TestUtils.WAIT_TIME)
 
     def get_info_button(self):
-        self.__scroll_to_info_button()
+        self._scroll_to_info_button()
         binfo = self.driver.find_element(*SettingsActivityLocators.BINFO)
         return binfo

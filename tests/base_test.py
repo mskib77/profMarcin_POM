@@ -41,7 +41,7 @@ class BaseTest(unittest.TestCase):
         self.driver.update_settings({"allowInvisibleElements": True})
         self.driver.implicitly_wait(TestUtils.WAIT_TIME)
 
-        self.__dismiss_splash_window()
+        self._dismiss_splash_window()
 
         self.create_activities()
 
@@ -52,7 +52,7 @@ class BaseTest(unittest.TestCase):
         self.sa = SettingsActivity(self.driver)
         self.ia = InfoActivity(self.driver)
 
-    def __dismiss_splash_window(self):
+    def _dismiss_splash_window(self):
         """ Clicks on OK to unlock Main Activity """
         """ Note: OK button may not be visible on some devices, therefore scrolling """
 

@@ -21,7 +21,7 @@ class SettingsPageTest(BaseTest):
         super().setUp()
         TestUtils.go_to_settings_page(self.driver, self.ma)
 
-    def __perform_difficulty_change(self, target_level):
+    def _perform_difficulty_change(self, target_level):
         """
         Auxiliary; Changes difficulty level to target_level while on Settings Activity
         """
@@ -47,7 +47,7 @@ class SettingsPageTest(BaseTest):
       # @unittest.skip
     def test_increase_level_above_upper_limit(self):
         maxl = SettingsPageTest.MAX_LEVEL
-        self.__perform_difficulty_change(maxl)
+        self._perform_difficulty_change(maxl)
         bplus = self.sa.get_bplus_button()
         bplus.click()
         sleep(0.5)
@@ -57,7 +57,7 @@ class SettingsPageTest(BaseTest):
       # @unittest.skip
     def test_decrease_level_below_lower_limit(self):
         minl = SettingsPageTest.MIN_LEVEL
-        self.__perform_difficulty_change(minl)
+        self._perform_difficulty_change(minl)
         bminus = self.sa.get_bminus_button()
         bminus.click()
         sleep(0.5)
@@ -71,7 +71,7 @@ class SettingsPageTest(BaseTest):
         Sets the number of buttons to a diff_level
         Then checks if there appear the same number of buttons on MainActivity
         """
-        self.__perform_difficulty_change(diff_level)
+        self._perform_difficulty_change(diff_level)
         # Going to Main Acctivity:
         self.driver.back()
         WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(
