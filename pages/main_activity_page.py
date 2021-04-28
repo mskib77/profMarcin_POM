@@ -1,10 +1,10 @@
 from appium.webdriver.common.touch_action import TouchAction
 from selenium.common.exceptions import NoSuchElementException
 
-from locators import MainActivityLocators
+from locators import MainActivityLocators as MAL
 
 
-class MainActivity():
+class MainActivity:
 
     def __init__(self, sterownik):
         self.driver = sterownik
@@ -12,21 +12,21 @@ class MainActivity():
     def long_touch_on_image(self):
         """Long touching on the image when the image is present"""
         action = TouchAction(self.driver)
-        image = self.driver.find_element(*MainActivityLocators.IMAGE)
+        image = self.driver.find_element(*MAL.IMAGE)
         action.long_press(image).perform()
 
     def long_touch_on_image_area(self):
         """Long touching on the image area when the image is absent"""
         action = TouchAction(self.driver)
-        image = self.driver.find_element(*MainActivityLocators.IMAGE_AREA)
+        image = self.driver.find_element(*MAL.IMAGE_AREA)
         action.long_press(image).perform()
 
     def get_word_buttons_list(self):
         """Returns list of the buttons with words"""
         try:
-            l_buttons = self.driver.find_elements(*MainActivityLocators.WORD_BUTTONS_LIST)
+            l_buttons = self.driver.find_elements(*MAL.WORD_BUTTONS_LIST)
         except NoSuchElementException:
-            l_words = []
+            l_buttons = []
         return l_buttons
 
     def get_words_list(self):
@@ -54,19 +54,15 @@ class MainActivity():
         b_dalej.click()
 
     def get_guessed_word(self):
-        guessed_word = self.driver.find_element(*MainActivityLocators.WORD_TO_BE_GUESSED_BY_ID).text
-        return guessed_word
-
-    def get_guessed_word_by_xpath(self):
-        guessed_word = self.driver.find_element(*MainActivityLocators.WORD_TO_BE_GUESSED_BY_XPATH).text
+        guessed_word = self.driver.find_element(*MAL.WORD_TO_BE_GUESSED_BY_ID).text
         return guessed_word
 
     def get_bagain_button(self):
-        bagain = self.driver.find_element(*MainActivityLocators.BAGAIN)
+        bagain = self.driver.find_element(*MAL.BAGAIN)
         return bagain
 
     def get_bdalej_button(self):
-        bdalej = self.driver.find_element(*MainActivityLocators.BDALEJ)
+        bdalej = self.driver.find_element(*MAL.BDALEJ)
         return bdalej
 
     def click_on_At_button(self):

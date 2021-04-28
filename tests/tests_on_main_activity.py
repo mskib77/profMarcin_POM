@@ -1,11 +1,9 @@
 import unittest
 from time import sleep
-
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.wait import WebDriverWait
-
-from locators import MainActivityLocators, SettingsActivityLocators
+from locators import MainActivityLocators as MAL, SettingsActivityLocators as SAL
 from tests.base_test import BaseTest
 from tests.test_utils import TestUtils
 
@@ -15,8 +13,7 @@ class MainActivityTest(BaseTest):
     # @unittest.skip
     def test_guessed_word_present_on_buttons(self):
         # waiting for the buttons with words to appear
-        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(
-            EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
+        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.WORD_BUTTONS_LIST))
         wb_list = self.ma.get_word_buttons_list()
         l_words = [el.text for el in wb_list]  # getting the list of words on the buttons
         guessed_word = self.ma.get_guessed_word()
@@ -46,8 +43,7 @@ class MainActivityTest(BaseTest):
         and incorrect buttons should be disabled.
         """
         # Waiting for the buttons with words to appear
-        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(
-            EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
+        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.WORD_BUTTONS_LIST))
         # Clicking on the right button:
         wb_list, guessed_word = self.ma.click_the_proper_button()
         # Checking whether additional buttons appeared:
@@ -81,11 +77,9 @@ class MainActivityTest(BaseTest):
         Can switch to Settings?
         Passed if there are checkable elements in the activity we switch to.
         """
-        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(
-            EC.presence_of_element_located(MainActivityLocators.IMAGE_AREA))
+        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.IMAGE_AREA))
         self.ma.long_touch_on_image()
-        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(
-            EC.presence_of_element_located(SettingsActivityLocators.POZIOM))
+        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(SAL.POZIOM))
         list_not_empty = self.sa.settings_elements_present()
         self.assertTrue(list_not_empty, "Settings did not appear!")
 
@@ -107,21 +101,18 @@ class MainActivityTest(BaseTest):
         4. guessed word remains unchanged.
         """
         # Waiting for the buttons with words to appear
-        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(
-            EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
+        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.WORD_BUTTONS_LIST))
         # Clicking on the right button:
         wb_list_old, guessed_word_old = self.ma.click_the_proper_button()
         w_list_old = self.ma.get_words_list()
         print(f"w_list_old = {w_list_old}")
         # Waiting for the @ button to appear:
-        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(
-            EC.presence_of_element_located(MainActivityLocators.BAGAIN))
+        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.BAGAIN))
         # Clicking the @ button:
         self.ma.click_on_At_button()
         sleep(1)
         # Waiting for the buttons with words to appear:
-        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(
-            EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
+        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.WORD_BUTTONS_LIST))
         wb_list_new = self.ma.get_word_buttons_list()
         w_list_new = self.ma.get_words_list()
         print(f"w_list_new = {w_list_new}")
@@ -140,7 +131,7 @@ class MainActivityTest(BaseTest):
         # Taking the shot if an error:
         if test_fail:
             TestUtils.screen_shot(self.driver, "improper behaviour after clicking At button")
-        # determining reason(s) of the negative test:
+        # determining the reason(s) of negative test:
         reason = []
         if test_fail_1: reason.append("different numbers of buttons")
         if test_fail_2: reason.append("different lists of words")
@@ -161,21 +152,18 @@ class MainActivityTest(BaseTest):
         Note: picture may not be present; it is correct, do not test this.
         """
         # Waiting for the buttons with words to appear
-        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(
-            EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
+        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.WORD_BUTTONS_LIST))
         # Getting the number of buttons with words:
         old_number = len(self.ma.get_word_buttons_list())
         # Clicking the right button:
         self.ma.click_the_proper_button()
         # Waiting for the button with green arrow to appear:
-        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(
-            EC.presence_of_element_located(MainActivityLocators.BDALEJ))
+        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.BDALEJ))
         # Moving to the next exercise - clicking the button with green arrow:
         self.ma.click_bdalej_button()
         # Waiting for the green arrow button to disappear and new word buttons to appear:
         sleep(0.5)
-        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(
-            EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
+        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.WORD_BUTTONS_LIST))
 
         # Checking the test conditions 1,2,3,4, one by one:
 
@@ -215,6 +203,7 @@ class MainActivityTest(BaseTest):
 
         self.assertFalse(test_fail, f"Error while moving to the next exercise! Reason: {reason} See picture.")
 
+    # @unittest.skip
     def _check_after_bad_button_clicked(self, wb_list):
         """Auxiliary; checks whether everything's OK, after we clicked the wrong word button"""
         """expected cond.: additional buttons should not appear and no word button should be disabled"""
@@ -231,6 +220,7 @@ class MainActivityTest(BaseTest):
             all_enabled = self._are_all_buttons_enabled(wb_list)
             return all_enabled
 
+    # @unittest.skip
     def test_behaviour_after_improper_button_clicked(self):
         """ How does it behave after we clicked on an improper word button(s)?
         Passed if
@@ -238,8 +228,7 @@ class MainActivityTest(BaseTest):
           2. no word button is disabled
         """
         # Waiting for the buttons with words to appear
-        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(
-            EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
+        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.WORD_BUTTONS_LIST))
         # Clicking all the word buttons except the right one(s) and performing check:
         guessed_word = self.ma.get_guessed_word()
         wb_list = self.ma.get_word_buttons_list()

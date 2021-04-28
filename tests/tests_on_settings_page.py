@@ -1,11 +1,10 @@
 import unittest
-
 from ddt import ddt, data
 from time import sleep
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
-from locators import MainActivityLocators, InfoActivityLocators
+from locators import MainActivityLocators as MAL, InfoActivityLocators as IAL, SettingsActivityLocators as SAL
 from tests.base_test import BaseTest
 from tests.test_utils import TestUtils
 
@@ -19,7 +18,13 @@ class SettingsPageTest(BaseTest):
     def setUp(self):
         """Going to Settings Activity before each test"""
         super().setUp()
-        TestUtils.go_to_settings_page(self.driver, self.ma)
+        self._go_to_settings_page(self.driver)
+
+    def _go_to_settings_page(self, driver):
+        """ Auxiliary; brings up the Settings activity. Starts from MainActivity """
+        """ Called by setUp() """
+        self.ma.long_touch_on_image()
+        WebDriverWait(driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(SAL.POZIOM))
 
     def _perform_difficulty_change(self, target_level):
         """
@@ -30,7 +35,7 @@ class SettingsPageTest(BaseTest):
 
         # parameter sanitization:
         if target_level not in range(minl, maxl + 1):
-            raise ValueError(f"difficulty level must be betweem {maxl} and {minl}")
+            raise ValueError(f"difficulty level must be between {maxl} and {minl}")
 
         curr_level = int(self.sa.get_poziom_view().text)
         delta = curr_level - target_level
@@ -44,7 +49,7 @@ class SettingsPageTest(BaseTest):
             btn_to_click.click()
             sleep(0.5)
 
-      # @unittest.skip
+    # @unittest.skip
     def test_increase_level_above_upper_limit(self):
         maxl = SettingsPageTest.MAX_LEVEL
         self._perform_difficulty_change(maxl)
@@ -54,7 +59,7 @@ class SettingsPageTest(BaseTest):
         curr_level = int(self.sa.get_poziom_view().text)
         self.assertTrue(curr_level == maxl, f"Difficulty level ({curr_level}) was set above allowed limit!")
 
-      # @unittest.skip
+    # @unittest.skip
     def test_decrease_level_below_lower_limit(self):
         minl = SettingsPageTest.MIN_LEVEL
         self._perform_difficulty_change(minl)
@@ -64,8 +69,8 @@ class SettingsPageTest(BaseTest):
         curr_level = int(self.sa.get_poziom_view().text)
         self.assertTrue(curr_level == minl, f"Difficulty level ({curr_level}) was set below allowed limit!")
 
-      # @unittest.skip
-    @data(1, 3, 6)
+     # @unittest.skip
+    @data(1, 2, 6)
     def test_number_of_buttons_equals_difficulty_level(self, diff_level):
         """
         Sets the number of buttons to a diff_level
@@ -74,14 +79,14 @@ class SettingsPageTest(BaseTest):
         self._perform_difficulty_change(diff_level)
         # Going to Main Acctivity:
         self.driver.back()
-        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(
-            EC.presence_of_element_located(MainActivityLocators.WORD_BUTTONS_LIST))
+        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.WORD_BUTTONS_LIST))
         wb_list = self.ma.get_word_buttons_list()
         wb_count = len(wb_list)
         sleep(2)
         self.assertTrue(wb_count == diff_level,
                         f"Difficulty level ({diff_level}) and the number of word buttons ({wb_count}) do not match!")
 
+    # @unittest.skip
     def test_switching_to_info_activity(self):
         """
         Can switch to Info?
@@ -93,8 +98,7 @@ class SettingsPageTest(BaseTest):
         binfo.click()
         test_ok = False
         try:
-            WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(
-                EC.presence_of_element_located(InfoActivityLocators.ACTION_BAR_TITLE))
+            WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(IAL.ACTION_BAR_TITLE))
             el = self.ia.get_action_bar_title()
             if el.text.upper() == "Informacje o aplikacji".upper():
                 test_ok = True

@@ -1,5 +1,5 @@
 from selenium.common.exceptions import NoSuchElementException
-from locators import SettingsActivityLocators
+from locators import SettingsActivityLocators as SAL
 from tests.test_utils import TestUtils
 
 
@@ -20,15 +20,15 @@ class SettingsActivity:
         return checkable_list is not []
 
     def get_bplus_button(self):
-        bplus = self.driver.find_element(*SettingsActivityLocators.BPLUS)
+        bplus = self.driver.find_element(*SAL.BPLUS)
         return bplus
 
     def get_bminus_button(self):
-        bminus = self.driver.find_element(*SettingsActivityLocators.BMINUS)
+        bminus = self.driver.find_element(*SAL.BMINUS)
         return bminus
 
     def get_poziom_view(self):
-        vpoziom = self.driver.find_element(*SettingsActivityLocators.POZIOM)
+        vpoziom = self.driver.find_element(*SAL.POZIOM)
         return vpoziom
 
     def _scroll_to_info_button(self):
@@ -41,7 +41,7 @@ class SettingsActivity:
         found = False
         while not found:
             try:
-                self.driver.find_element(*SettingsActivityLocators.BINFO)
+                self.driver.find_element(*SAL.BINFO)
                 found = True
             except NoSuchElementException:
                 self.driver.swipe(x/2, y*0.9, x/2, y*0.1, 1000)
@@ -50,5 +50,5 @@ class SettingsActivity:
 
     def get_info_button(self):
         self._scroll_to_info_button()
-        binfo = self.driver.find_element(*SettingsActivityLocators.BINFO)
+        binfo = self.driver.find_element(*SAL.BINFO)
         return binfo

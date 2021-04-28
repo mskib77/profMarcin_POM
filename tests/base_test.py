@@ -4,7 +4,9 @@ import unittest
 from appium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
-
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from locators import MainActivityLocators as MAL
 from pages.info_activity_page import InfoActivity
 from pages.main_activity_page import MainActivity
 from pages.settings_activity_page import SettingsActivity
@@ -25,8 +27,8 @@ class BaseTest(unittest.TestCase):
         desired_caps = {}
         desired_caps['platformName'] = 'Android'
 
-        # desired_caps['deviceName'] = 'emulator-554'
-        desired_caps['deviceName'] = '5210f505ea6b8467' # moj nowy telefon
+        desired_caps['deviceName'] = 'emulator-554'
+        # desired_caps['deviceName'] = '5210f505ea6b8467' # moj nowy telefon
         # desired_caps['deviceName'] = '5200241cea6f7523'   # moj Stary telefon
 
         desired_caps['app'] = PATH('ProfMarcin.apk')
@@ -35,6 +37,8 @@ class BaseTest(unittest.TestCase):
         desired_caps['autoGrantPermissions'] = 'true'
 
         desired_caps['automationName'] = 'UiAutomator2'
+
+        # desired_caps['noReset'] = 'true'
 
         self.driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
 
@@ -71,6 +75,7 @@ class BaseTest(unittest.TestCase):
                 self.driver.swipe(x/2, y/2, x/2, y/7, 500)
         # restoring timeout:
         self.driver.implicitly_wait(TestUtils.WAIT_TIME)
+        WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.IMAGE_AREA))
 
 
     def tearDown(self):
