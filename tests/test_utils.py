@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 
+
 class TestUtils:
     WAIT_TIME = 10  # system-wide implicit wait
 
@@ -18,5 +19,3 @@ class TestUtils:
         x = size['width']
         y = size['height']
         return x, y
-
-
