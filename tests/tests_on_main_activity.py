@@ -10,10 +10,10 @@ from tests.test_utils import TestUtils
 
 class MainActivityTest(BaseTest):
 
-    # @unittest.skip
+    @unittest.skip
     # test No 1 in documentation
-    def test_guessed_word_present_on_buttons(self):
-        # waiting for the buttons with words to appear
+    def test_guessed_word_presents_on_buttons(self):
+        # waiting for the buttons with words to appear:
         WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.WORD_BUTTONS_LIST))
         wb_list = self.ma.get_word_buttons_list()
         l_words = [el.text for el in wb_list]  # getting the list of words on the buttons
@@ -24,20 +24,20 @@ class MainActivityTest(BaseTest):
             TestUtils.screen_shot(self.driver, "No proper word on any button")
 
         self.assertTrue(guessed_word_on_buttons,
-                        "test_guessed_word_presence_on_buttons(): No proper word on any button!")
+                        "test_guessed_word_presents_on_buttons(): No proper word on any button!")
 
     def _are_additional_buttons_present(self):
         """Auxiliary; checks whether buttons Dalej and @ are present on the screen"""
         add_buttons_present: bool = True
         try:
-            bdalej = self.ma.get_bdalej_button()
-            bagain = self.ma.get_bagain_button()
+            self.ma.get_bdalej_button()
+            self.ma.get_bagain_button()
         except NoSuchElementException:
             add_buttons_present = False
 
         return add_buttons_present
 
-    # @unittest.skip
+    @unittest.skip
     # test No 2 in documentation
     def test_behaviour_after_proper_button_clicked(self):
         """
@@ -73,7 +73,7 @@ class MainActivityTest(BaseTest):
 
         self.assertTrue(test_ok, "\n" + test_name + "\n" + msg1 + " or " + msg2 + ". See picture.")
 
-    # @unittest.skip
+    @unittest.skip
     # test No 3 in documentation
     def test_switching_to_settings(self):
         """
@@ -93,7 +93,7 @@ class MainActivityTest(BaseTest):
             if is_b_disabled: return False
         return True
 
-    # @unittest.skip
+    @unittest.skip
     # test No 4 in documentation
     def test_clicking_on_At_button(self):
         """
@@ -144,7 +144,7 @@ class MainActivityTest(BaseTest):
 
         self.assertFalse(test_fail, f"Improper behaviour after clicking @ button! Reason: {reason}")
 
-    # @unittest.skip
+    @unittest.skip
     # test No 5 in documentation
     def test_moving_to_next_exercise(self):
         """
