@@ -1,6 +1,6 @@
 from time import sleep
 
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from locators import MainActivityLocators as MAL, InfoActivityLocators as IAL

@@ -1,6 +1,5 @@
 import os
 import unittest
-
 from appium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
@@ -68,7 +67,6 @@ class BaseTest(unittest.TestCase):
         while not found:
             try:
                 el = self.driver.find_element(By.ID, "autyzmsoft.pl.profmarcin:id/btn_OK")
-
                 found = True
                 el.click()
             except NoSuchElementException:
@@ -76,7 +74,6 @@ class BaseTest(unittest.TestCase):
         # restoring timeout:
         self.driver.implicitly_wait(TestUtils.WAIT_TIME)
         WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.IMAGE_AREA))
-
 
     def tearDown(self):
         print("tearDown z BaseTest")
