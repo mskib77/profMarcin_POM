@@ -11,6 +11,7 @@ from tests.test_utils import TestUtils
 class MainActivityTest(BaseTest):
 
     # @unittest.skip
+    # test No 1 in documentation
     def test_guessed_word_present_on_buttons(self):
         # waiting for the buttons with words to appear
         WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.WORD_BUTTONS_LIST))
@@ -37,6 +38,7 @@ class MainActivityTest(BaseTest):
         return add_buttons_present
 
     # @unittest.skip
+    # test No 2 in documentation
     def test_behaviour_after_proper_button_clicked(self):
         """
         After clicking the button with guessed word, additional buttons should appear
@@ -72,6 +74,7 @@ class MainActivityTest(BaseTest):
         self.assertTrue(test_ok, "\n" + test_name + "\n" + msg1 + " or " + msg2 + ". See picture.")
 
     # @unittest.skip
+    # test No 3 in documentation
     def test_switching_to_settings(self):
         """
         Can switch to Settings?
@@ -91,6 +94,7 @@ class MainActivityTest(BaseTest):
         return True
 
     # @unittest.skip
+    # test No 4 in documentation
     def test_clicking_on_At_button(self):
         """
         What happens after we click on @ button.
@@ -141,6 +145,7 @@ class MainActivityTest(BaseTest):
         self.assertFalse(test_fail, f"Improper behaviour after clicking @ button! Reason: {reason}")
 
     # @unittest.skip
+    # test No 5 in documentation
     def test_moving_to_next_exercise(self):
         """
         What happens after we click on the button with green arrow.
@@ -203,9 +208,8 @@ class MainActivityTest(BaseTest):
 
         self.assertFalse(test_fail, f"Error while moving to the next exercise! Reason: {reason} See picture.")
 
-    # @unittest.skip
     def _check_after_bad_button_clicked(self, wb_list):
-        """Auxiliary; checks whether everything's OK, after we clicked the wrong word button"""
+        """Auxiliary; checks whether everything's OK after we clicked the wrong word button"""
         """expected cond.: additional buttons should not appear and no word button should be disabled"""
         """Parameter: wb_list: list of buttons to check their enabled state"""
         # (speeding up a bit, because in proper conditions, additional buttons are not present)
@@ -221,6 +225,7 @@ class MainActivityTest(BaseTest):
             return all_enabled
 
     # @unittest.skip
+    # test No 6 in documentation
     def test_behaviour_after_improper_button_clicked(self):
         """ How does it behave after we clicked on an improper word button(s)?
         Passed if

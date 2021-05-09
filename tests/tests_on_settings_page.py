@@ -3,7 +3,7 @@ from ddt import ddt, data
 from time import sleep
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from locators import MainActivityLocators as MAL, InfoActivityLocators as IAL, SettingsActivityLocators as SAL
 from tests.base_test import BaseTest
 from tests.test_utils import TestUtils
@@ -27,9 +27,7 @@ class SettingsPageTest(BaseTest):
         WebDriverWait(driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(SAL.POZIOM))
 
     def _perform_difficulty_change(self, target_level):
-        """
-        Auxiliary; Changes difficulty level to target_level while on Settings Activity
-        """
+        """Auxiliary; Changes difficulty level to target_level while on Settings Activity"""
         maxl = SettingsPageTest.MAX_LEVEL
         minl = SettingsPageTest.MIN_LEVEL
 
@@ -50,7 +48,8 @@ class SettingsPageTest(BaseTest):
             sleep(0.5)
 
     # @unittest.skip
-    def test_increase_level_above_upper_limit(self):
+    # test No 7 in documentation
+    def test_increase_level_above_upmost_limit(self):
         maxl = SettingsPageTest.MAX_LEVEL
         self._perform_difficulty_change(maxl)
         bplus = self.sa.get_bplus_button()
@@ -60,7 +59,8 @@ class SettingsPageTest(BaseTest):
         self.assertTrue(curr_level == maxl, f"Difficulty level ({curr_level}) was set above allowed limit!")
 
     # @unittest.skip
-    def test_decrease_level_below_lower_limit(self):
+    # test No 8 in documentation
+    def test_decrease_level_below_lowest_limit(self):
         minl = SettingsPageTest.MIN_LEVEL
         self._perform_difficulty_change(minl)
         bminus = self.sa.get_bminus_button()
@@ -69,7 +69,8 @@ class SettingsPageTest(BaseTest):
         curr_level = int(self.sa.get_poziom_view().text)
         self.assertTrue(curr_level == minl, f"Difficulty level ({curr_level}) was set below allowed limit!")
 
-     # @unittest.skip
+    # @unittest.skip
+    # test No 9 in documentation
     @data(1, 2, 6)
     def test_number_of_buttons_equals_difficulty_level(self, diff_level):
         """
@@ -87,12 +88,13 @@ class SettingsPageTest(BaseTest):
                         f"Difficulty level ({diff_level}) and the number of word buttons ({wb_count}) do not match!")
 
     # @unittest.skip
+    # test No 10 in documentation
     def test_switching_to_info_activity(self):
         """
         Can switch to Info?
         Passed if:
         1. there is "android:id/action_bar_title element in the activity we switch to AND
-        2. it contains  "Informacje o aplikacji" text
+        2. it contains "Informacje o aplikacji" text
         """
         binfo = self.sa.get_info_button()
         binfo.click()
@@ -102,7 +104,7 @@ class SettingsPageTest(BaseTest):
             el = self.ia.get_action_bar_title()
             if el.text.upper() == "Informacje o aplikacji".upper():
                 test_ok = True
-        except NoSuchElementException:
+        except TimeoutException:
             test_ok = False
         finally:
             sleep(2)

@@ -1,6 +1,6 @@
 from time import sleep
 
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from locators import MainActivityLocators as MAL, InfoActivityLocators as IAL
@@ -24,15 +24,17 @@ class InfoPageTest(BaseTest):
         self.sa.get_info_button().click()
         WebDriverWait(driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(IAL.ACTION_BAR_TITLE))
 
+    # test No 11 in documentation
     def test_switching_to_main_activity(self):
         """Can we switch to Main Activity while on Info page?"""
         bstart = self.ia.get_start_button()
         bstart.click()
         test_ok = False
         try:
+            WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.IMAGE))
             WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.WORD_BUTTONS_LIST))
             test_ok = True
-        except NoSuchElementException:
+        except TimeoutException:
             test_ok = False
         finally:
             sleep(2)
