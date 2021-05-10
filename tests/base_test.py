@@ -34,18 +34,12 @@ class BaseTest(unittest.TestCase):
         desired_caps['appPackage'] = 'autyzmsoft.pl.profmarcin'
         desired_caps['appActivity'] = 'autyzmsoft.pl.profmarcin.MainActivity'
         desired_caps['autoGrantPermissions'] = 'true'
-
         desired_caps['automationName'] = 'UiAutomator2'
-
         # desired_caps['noReset'] = 'true'
-
         self.driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
-
-        self.driver.update_settings({"allowInvisibleElements": True})
+        self.driver.update_settings({"allowInvisibleElements": True})   # nie dziala....
         self.driver.implicitly_wait(TestUtils.WAIT_TIME)
-
         self._dismiss_splash_window()
-
         self.create_activities()
 
     def create_activities(self):
@@ -56,8 +50,8 @@ class BaseTest(unittest.TestCase):
         self.ia = InfoActivity(self.driver)
 
     def _dismiss_splash_window(self):
-        """ Clicks on OK to unlock Main Activity """
-        """ Note: OK button may not be visible on some devices, therefore scrolling """
+        """ Clicks on Start button to unlock Main Activity """
+        """ Note: Start button may not be visible on some devices, therefore scrolling """
 
         x, y = TestUtils.get_screen_dimensions(self.driver)
         # speeding up a little:
@@ -68,11 +62,11 @@ class BaseTest(unittest.TestCase):
             try:
                 el = self.driver.find_element(By.ID, "autyzmsoft.pl.profmarcin:id/btn_OK")
                 found = True
+                # restoring timeout:
+                self.driver.implicitly_wait(TestUtils.WAIT_TIME)
                 el.click()
             except NoSuchElementException:
                 self.driver.swipe(x/2, y/2, x/2, y/7, 500)
-        # restoring timeout:
-        self.driver.implicitly_wait(TestUtils.WAIT_TIME)
         WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.IMAGE_AREA))
 
     def tearDown(self):

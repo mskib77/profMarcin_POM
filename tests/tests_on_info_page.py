@@ -1,5 +1,5 @@
+import unittest
 from time import sleep
-
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -25,6 +25,7 @@ class InfoPageTest(BaseTest):
         WebDriverWait(driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(IAL.ACTION_BAR_TITLE))
 
     # test No 11 in documentation
+    # @unittest.skip
     def test_switching_to_main_activity(self):
         """Can we switch to Main Activity while on Info page?"""
         bstart = self.ia.get_start_button()
@@ -39,3 +40,7 @@ class InfoPageTest(BaseTest):
         finally:
             sleep(2)
         self.assertTrue(test_ok, "Main Activity did not appear!")
+
+
+if __name__ == '__main__':
+    unittest.main()

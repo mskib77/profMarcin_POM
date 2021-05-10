@@ -47,8 +47,8 @@ class SettingsPageTest(BaseTest):
             btn_to_click.click()
             sleep(0.5)
 
-    # @unittest.skip
     # test No 7 in documentation
+    # @unittest.skip
     def test_increase_level_above_upmost_limit(self):
         maxl = SettingsPageTest.MAX_LEVEL
         self._perform_difficulty_change(maxl)
@@ -58,8 +58,8 @@ class SettingsPageTest(BaseTest):
         curr_level = int(self.sa.get_poziom_view().text)
         self.assertTrue(curr_level == maxl, f"Difficulty level ({curr_level}) was set above allowed limit!")
 
-    # @unittest.skip
     # test No 8 in documentation
+    # @unittest.skip
     def test_decrease_level_below_lowest_limit(self):
         minl = SettingsPageTest.MIN_LEVEL
         self._perform_difficulty_change(minl)
@@ -69,8 +69,8 @@ class SettingsPageTest(BaseTest):
         curr_level = int(self.sa.get_poziom_view().text)
         self.assertTrue(curr_level == minl, f"Difficulty level ({curr_level}) was set below allowed limit!")
 
-    # @unittest.skip
     # test No 9 in documentation
+    # @unittest.skip
     @data(1, 2, 6)
     def test_number_of_buttons_equals_difficulty_level(self, diff_level):
         """
@@ -87,8 +87,8 @@ class SettingsPageTest(BaseTest):
         self.assertTrue(wb_count == diff_level,
                         f"Difficulty level ({diff_level}) and the number of word buttons ({wb_count}) do not match!")
 
-    # @unittest.skip
     # test No 10 in documentation
+    # @unittest.skip
     def test_switching_to_info_activity(self):
         """
         Can switch to Info?

@@ -10,8 +10,8 @@ from tests.test_utils import TestUtils
 
 class MainActivityTest(BaseTest):
 
-    @unittest.skip
     # test No 1 in documentation
+    # @unittest.skip
     def test_guessed_word_presents_on_buttons(self):
         # waiting for the buttons with words to appear:
         WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.WORD_BUTTONS_LIST))
@@ -37,8 +37,8 @@ class MainActivityTest(BaseTest):
 
         return add_buttons_present
 
-    @unittest.skip
     # test No 2 in documentation
+    # @unittest.skip
     def test_behaviour_after_proper_button_clicked(self):
         """
         After clicking the button with guessed word, additional buttons should appear
@@ -71,10 +71,10 @@ class MainActivityTest(BaseTest):
         if not test_ok:
             TestUtils.screen_shot(self.driver, test_name)
 
-        self.assertTrue(test_ok, "\n" + test_name + "\n" + msg1 + " or " + msg2 + ". See picture.")
+        self.assertTrue(test_ok, "\n" + test_name + "\n" + msg1 + " or " + msg2 + ". See screenshot.")
 
-    @unittest.skip
     # test No 3 in documentation
+    # @unittest.skip
     def test_switching_to_settings(self):
         """
         Can switch to Settings?
@@ -93,8 +93,8 @@ class MainActivityTest(BaseTest):
             if is_b_disabled: return False
         return True
 
-    @unittest.skip
     # test No 4 in documentation
+    # @unittest.skip
     def test_clicking_on_At_button(self):
         """
         What happens after we click on @ button.
@@ -144,8 +144,8 @@ class MainActivityTest(BaseTest):
 
         self.assertFalse(test_fail, f"Improper behaviour after clicking @ button! Reason: {reason}")
 
-    @unittest.skip
     # test No 5 in documentation
+    # @unittest.skip
     def test_moving_to_next_exercise(self):
         """
         What happens after we click on the button with green arrow.
@@ -206,7 +206,7 @@ class MainActivityTest(BaseTest):
         if test_fail_3: reason.append("numbers of buttons in old and new exercises differ")
         if test_fail_4: reason.append("not all new buttons enabled")
 
-        self.assertFalse(test_fail, f"Error while moving to the next exercise! Reason: {reason} See picture.")
+        self.assertFalse(test_fail, f"Error while moving to the next exercise! Reason: {reason} See screenshot.")
 
     def _check_after_bad_button_clicked(self, wb_list):
         """Auxiliary; checks whether everything's OK after we clicked the wrong word button"""
@@ -224,10 +224,10 @@ class MainActivityTest(BaseTest):
             all_enabled = self._are_all_buttons_enabled(wb_list)
             return all_enabled
 
-    # @unittest.skip
     # test No 6 in documentation
+    # @unittest.skip
     def test_behaviour_after_improper_button_clicked(self):
-        """ How does it behave after we clicked on an improper word button(s)?
+        """ How the app behaves after we clicked an improper word button(s)?
         Passed if
           1. additional buttons (buttons with @ and with green arrow) do NOT appear AND
           2. no word button is disabled
@@ -249,7 +249,7 @@ class MainActivityTest(BaseTest):
         if not test_ok:
             TestUtils.screen_shot(self.driver, "Improper behavior after clicking a wrong word button")
 
-        self.assertTrue(test_ok, "Improper behavior after clicking a wrong word button! See picture.")
+        self.assertTrue(test_ok, "Improper behavior after clicking a wrong word button! See screenshot.")
 
 
 if __name__ == '__main__':
