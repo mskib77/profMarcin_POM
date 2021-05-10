@@ -10,7 +10,7 @@ from tests.test_utils import TestUtils
 
 class MainActivityTest(BaseTest):
 
-    # test No 1 in documentation
+    # No 1 test case in documentation
     # @unittest.skip
     def test_guessed_word_presents_on_buttons(self):
         # waiting for the buttons with words to appear:
@@ -37,7 +37,7 @@ class MainActivityTest(BaseTest):
 
         return add_buttons_present
 
-    # test No 2 in documentation
+    # No 2 test case in documentation
     # @unittest.skip
     def test_behaviour_after_proper_button_clicked(self):
         """
@@ -73,7 +73,7 @@ class MainActivityTest(BaseTest):
 
         self.assertTrue(test_ok, "\n" + test_name + "\n" + msg1 + " or " + msg2 + ". See screenshot.")
 
-    # test No 3 in documentation
+    # No 3 test case in documentation
     # @unittest.skip
     def test_switching_to_settings(self):
         """
@@ -93,7 +93,7 @@ class MainActivityTest(BaseTest):
             if is_b_disabled: return False
         return True
 
-    # test No 4 in documentation
+    # No 4 test case in documentation
     # @unittest.skip
     def test_clicking_on_At_button(self):
         """
@@ -144,7 +144,7 @@ class MainActivityTest(BaseTest):
 
         self.assertFalse(test_fail, f"Improper behaviour after clicking @ button! Reason: {reason}")
 
-    # test No 5 in documentation
+    # No 5 test case in documentation
     # @unittest.skip
     def test_moving_to_next_exercise(self):
         """
@@ -224,7 +224,7 @@ class MainActivityTest(BaseTest):
             all_enabled = self._are_all_buttons_enabled(wb_list)
             return all_enabled
 
-    # test No 6 in documentation
+    # No 6 test case in documentation
     # @unittest.skip
     def test_behaviour_after_improper_button_clicked(self):
         """ How the app behaves after we clicked an improper word button(s)?

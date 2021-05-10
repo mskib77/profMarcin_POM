@@ -3,7 +3,7 @@ from ddt import ddt, data
 from time import sleep
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.common.exceptions import TimeoutException
 from locators import MainActivityLocators as MAL, InfoActivityLocators as IAL, SettingsActivityLocators as SAL
 from tests.base_test import BaseTest
 from tests.test_utils import TestUtils
@@ -47,7 +47,7 @@ class SettingsPageTest(BaseTest):
             btn_to_click.click()
             sleep(0.5)
 
-    # test No 7 in documentation
+    # No 7 test case in documentation
     # @unittest.skip
     def test_increase_level_above_upmost_limit(self):
         maxl = SettingsPageTest.MAX_LEVEL
@@ -58,7 +58,7 @@ class SettingsPageTest(BaseTest):
         curr_level = int(self.sa.get_poziom_view().text)
         self.assertTrue(curr_level == maxl, f"Difficulty level ({curr_level}) was set above allowed limit!")
 
-    # test No 8 in documentation
+    # No 8 test case in documentation
     # @unittest.skip
     def test_decrease_level_below_lowest_limit(self):
         minl = SettingsPageTest.MIN_LEVEL
@@ -69,7 +69,7 @@ class SettingsPageTest(BaseTest):
         curr_level = int(self.sa.get_poziom_view().text)
         self.assertTrue(curr_level == minl, f"Difficulty level ({curr_level}) was set below allowed limit!")
 
-    # test No 9 in documentation
+    # No 9 test case in documentation
     # @unittest.skip
     @data(1, 2, 6)
     def test_number_of_buttons_equals_difficulty_level(self, diff_level):
@@ -78,7 +78,7 @@ class SettingsPageTest(BaseTest):
         Then checks if there appear the same number of buttons on MainActivity
         """
         self._perform_difficulty_change(diff_level)
-        # Going to Main Acctivity:
+        # Going to Main Activity:
         self.driver.back()
         WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.WORD_BUTTONS_LIST))
         wb_list = self.ma.get_word_buttons_list()
@@ -87,7 +87,7 @@ class SettingsPageTest(BaseTest):
         self.assertTrue(wb_count == diff_level,
                         f"Difficulty level ({diff_level}) and the number of word buttons ({wb_count}) do not match!")
 
-    # test No 10 in documentation
+    # No 10 test case in documentation
     # @unittest.skip
     def test_switching_to_info_activity(self):
         """

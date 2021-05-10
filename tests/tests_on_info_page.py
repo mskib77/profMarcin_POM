@@ -24,7 +24,7 @@ class InfoPageTest(BaseTest):
         self.sa.get_info_button().click()
         WebDriverWait(driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(IAL.ACTION_BAR_TITLE))
 
-    # test No 11 in documentation
+    # No 11 test case in documentation
     # @unittest.skip
     def test_switching_to_main_activity(self):
         """Can we switch to Main Activity while on Info page?"""
