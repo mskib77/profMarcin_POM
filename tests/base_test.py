@@ -56,7 +56,7 @@ class BaseTest(unittest.TestCase):
         x, y = TestUtils.get_screen_dimensions(self.driver)
         # speeding up a little:
         self.driver.implicitly_wait(1)
-        # scrolling down till the INFO button appears:
+        # scrolling down till OK button appears:
         found = False
         while not found:
             try:
