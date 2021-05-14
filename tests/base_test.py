@@ -22,7 +22,7 @@ class BaseTest(unittest.TestCase):
     """
 
     def setUp(self):
-        print("setUp z BaseTest")
+        print("setUp z BaseTest\n")
         desired_caps = {}
         desired_caps['platformName'] = 'Android'
 

@@ -109,7 +109,7 @@ class MainActivityTest(BaseTest):
         # Clicking on the right button:
         wb_list_old, guessed_word_old = self.ma.click_the_proper_button()
         w_list_old = self.ma.get_words_list()
-        print(f"w_list_old = {w_list_old}")
+        print(f"w_list_old = {w_list_old}\n")
         # Waiting for the @ button to appear:
         WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.BAGAIN))
         # Clicking the @ button:
@@ -119,7 +119,7 @@ class MainActivityTest(BaseTest):
         WebDriverWait(self.driver, TestUtils.WAIT_TIME).until(EC.presence_of_element_located(MAL.WORD_BUTTONS_LIST))
         wb_list_new = self.ma.get_word_buttons_list()
         w_list_new = self.ma.get_words_list()
-        print(f"w_list_new = {w_list_new}")
+        print(f"w_list_new = {w_list_new}\n")
 
         # Checking the continton nr 1:
         test_fail_1 = not (len(wb_list_new) == len(wb_list_old))
