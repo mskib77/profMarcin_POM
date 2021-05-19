@@ -35,6 +35,9 @@ class BaseTest(unittest.TestCase):
         desired_caps['appActivity'] = 'autyzmsoft.pl.profmarcin.MainActivity'
         desired_caps['autoGrantPermissions'] = 'true'
         desired_caps['automationName'] = 'UiAutomator2'
+
+        desired_caps['allowTestPackages'] = 'true'
+
         # desired_caps['noReset'] = 'true'
         self.driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
         self.driver.update_settings({"allowInvisibleElements": True})   # nie dziala....

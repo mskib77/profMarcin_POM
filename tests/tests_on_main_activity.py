@@ -7,7 +7,6 @@ from locators import MainActivityLocators as MAL, SettingsActivityLocators as SA
 from tests.base_test import BaseTest
 from tests.test_utils import TestUtils
 
-
 class MainActivityTest(BaseTest):
 
     # No 1 test case in documentation
@@ -199,7 +198,7 @@ class MainActivityTest(BaseTest):
         if test_fail:
             TestUtils.screen_shot(self.driver, "Error while moving to the next exercise")
 
-        # 4.Determining the reason(s) of negative test:
+        # Determining the reason(s) of negative test:
         reason = []
         if test_fail_1: reason.append("new word buttons did not appear")
         if test_fail_2: reason.append("green arrow button and/or @ button still present")

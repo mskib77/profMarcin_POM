@@ -50,6 +50,7 @@ class SettingsPageTest(BaseTest):
     # No 7 test case in documentation
     # @unittest.skip
     def test_increase_level_above_upmost_limit(self):
+        """Is it possible to increase difficulty level above permitted value?"""
         maxl = SettingsPageTest.MAX_LEVEL
         self._perform_difficulty_change(maxl)
         bplus = self.sa.get_bplus_button()
@@ -61,6 +62,7 @@ class SettingsPageTest(BaseTest):
     # No 8 test case in documentation
     # @unittest.skip
     def test_decrease_level_below_lowest_limit(self):
+        """Is it possible to lower difficulty level below permitted value?"""
         minl = SettingsPageTest.MIN_LEVEL
         self._perform_difficulty_change(minl)
         bminus = self.sa.get_bminus_button()
